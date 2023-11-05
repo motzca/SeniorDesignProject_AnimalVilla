@@ -7,8 +7,8 @@ public class GameManager : MonoBehaviour
     public GameObject cardGameObject;
     public CardController mainCardController;
     public SpriteRenderer cardSpriteRenderer;
-    float fMovingSpeed = 1f;
-    Vector2 pos;
+    public float fMovingSpeed;
+    Vector3 pos;
 
     void Start()
     {
