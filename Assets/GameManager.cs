@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -8,13 +9,23 @@ public class GameManager : MonoBehaviour
     public CardController mainCardController;
     public SpriteRenderer cardSpriteRenderer;
     public float fMovingSpeed;
+    public float fSideMargin;
+    public float fSideTrigger;
     Vector3 pos;
+    public TMP_Text display;
+    public TMP_Text dialogue;
+    float alphaText;
+    public Color textColor;
 
     void Start()
     {
     }
     void Update()
     {
+        //Dialogue text handling
+        textColor.a = Mathf.Min(Mathf.Abs(cardGameObject.transform.position.x/2), 1);
+        dialogue.color = textColor;
+
         //Movement
         if (Input.GetMouseButton(0) && mainCardController.isMouseOver)
         {
@@ -27,17 +38,29 @@ public class GameManager : MonoBehaviour
         }
 
         //Checking right side
-        if (cardGameObject.transform.position.x > 2)
+        if (cardGameObject.transform.position.x > fSideMargin)
         {
-            cardSpriteRenderer.color = Color.green;
+            // dialogue.alpha = Mathf.Min(cardGameObject.transform.position.x, 1);
+            // dialouge.color.a = Mathf.Min(cardGameObject.transform.position.x, 1);
+            if(!Input.GetMouseButton(0) && cardGameObject.transform.position.y > fSideTrigger)
+            {
+                Debug.Log("Going left");
+            }
         }
-        else if (cardGameObject.transform.position.x < -2)
+        else if (cardGameObject.transform.position.x < -fSideMargin)
         {
-            cardSpriteRenderer.color = Color.red;
+            // dialogue.alpha = Mathf.Min(-cardGameObject.transform.position.x, 1);
+            if (!Input.GetMouseButton(0) && cardGameObject.transform.position.y < -fSideTrigger)
+            {
+                Debug.Log("Going right");
+            }
         }
         else
         {
             cardSpriteRenderer.color = Color.white;
         }
+
+        // UI
+        display.text = "" + textColor.a;
     }
 }
