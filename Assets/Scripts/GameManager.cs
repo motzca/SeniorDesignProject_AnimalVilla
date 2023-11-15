@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    //Gameobjects
+    //Game objects
     public GameObject cardGameObject;
     public CardController mainCardController;
     public SpriteRenderer cardSpriteRenderer;
     public ResourceManager resourceManager;
+
     // Tweaking variables
     public float fMovingSpeed;
     public float fSideMargin;
@@ -17,14 +18,17 @@ public class GameManager : MonoBehaviour
     Vector3 pos;
     float alphaText;
     public Color textColor;
+
     // UI
     public TMP_Text display;
+    public TMP_Text characterName;
     public TMP_Text dialogue;
+
     // Card variables
     private string leftQuote;
     private string rightQuote;
-    public Card currentCard;
-    public Card testCard;
+    Card currentCard;
+    Card testCard;
 
     void Start()
     {

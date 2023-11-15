@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CardController : MonoBehaviour
 {
+    public Card card;
     BoxCollider2D thisCard;
     public bool isMouseOver;
 
@@ -21,4 +22,13 @@ public class CardController : MonoBehaviour
     {
         isMouseOver = false;
     }
+}
+
+public enum CardSprite
+{
+    RACCON,
+    FOX,
+    ORANGECAT,
+    BLACKCAT,
+    RABBIT
 }

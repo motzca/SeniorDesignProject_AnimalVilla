@@ -450,8 +450,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 6
-  m_fontSizeBase: 6
+  m_fontSize: 4
+  m_fontSizeBase: 4
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -553,8 +553,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.27, y: -3.86}
-  m_SizeDelta: {x: 4.1668, y: 1.0237}
+  m_AnchoredPosition: {x: -0.27, y: -3.8797}
+  m_SizeDelta: {x: 4.1668, y: 0.9997}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1068998991
 GameObject:
@@ -810,6 +810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8b2a8f4575060440803a632173deef4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  card: {fileID: 0}
   isMouseOver: 0
 --- !u!1 &1713342220
 GameObject:
@@ -821,6 +822,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1713342222}
   - component: {fileID: 1713342223}
+  - component: {fileID: 1713342224}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -858,12 +860,32 @@ MonoBehaviour:
   cardGameObject: {fileID: 1535820222}
   mainCardController: {fileID: 1535820226}
   cardSpriteRenderer: {fileID: 1535820223}
+  resourceManager: {fileID: 0}
   fMovingSpeed: 5
   fSideMargin: 0.5
   fSideTrigger: 2
-  display: {fileID: 1068998992}
-  dialogue: {fileID: 831318873}
   textColor: {r: 0, g: 0, b: 0, a: 0}
+  display: {fileID: 1068998992}
+  characterName: {fileID: 0}
+  dialogue: {fileID: 831318873}
+--- !u!114 &1713342224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713342220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72f26d7c0021ee048846e72c809cfad0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprites:
+  - {fileID: -1003368898, guid: 468715344c7cc75439a52c1933fc34dd, type: 3}
+  - {fileID: -1566896022, guid: 468715344c7cc75439a52c1933fc34dd, type: 3}
+  - {fileID: 1999490050, guid: 468715344c7cc75439a52c1933fc34dd, type: 3}
+  - {fileID: -72933606, guid: 468715344c7cc75439a52c1933fc34dd, type: 3}
+  - {fileID: 2041550790, guid: 468715344c7cc75439a52c1933fc34dd, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
