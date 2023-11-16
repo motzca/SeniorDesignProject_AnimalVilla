@@ -18,27 +18,66 @@ public class GameManager : MonoBehaviour
     Vector3 pos;
     float alphaText;
     public Color textColor;
+    public float divideValue;
 
     // UI
-    public TMP_Text display;
     public TMP_Text characterName;
     public TMP_Text dialogue;
 
     // Card variables
     private string leftQuote;
     private string rightQuote;
-    Card currentCard;
-    Card testCard;
+    public Card currentCard;
+    public Card testCard;
 
     void Start()
     {
         LoadCard(testCard);
     }
+
+    void UpdateDialogue()
+    {
+        dialogue.color = textColor;
+        if (cardGameObject.transform.position.x < 0)
+        {
+            dialogue.text = leftQuote;
+        }
+        else
+        {
+            dialogue.text = rightQuote;
+        }
+    }
+
     void Update()
     {
-        //Dialogue text handling
-        textColor.a = Mathf.Min(Mathf.Abs(cardGameObject.transform.position.x/2), 1);
-        dialogue.color = textColor;
+        textColor.a = Mathf.Min((Mathf.Abs(cardGameObject.transform.position.x) - fSideMargin)/ divideValue, 1);
+        if (cardGameObject.transform.position.x > fSideTrigger)
+        {
+            if (Input.GetMouseButtonUp(0))
+            {
+              currentCard.Right();
+                NewCard();
+            }
+            
+        } else if (cardGameObject.transform.position.x > fSideMargin)
+        {
+        }
+        else if (cardGameObject.transform.position.x < -fSideMargin)
+        {
+            textColor.a = 0;
+        }
+        else if (cardGameObject.transform.position.x < -fSideTrigger)
+        {
+        }
+        else
+        {
+            if (Input.GetMouseButtonUp(0))
+            {
+                currentCard.Left();
+                NewCard();
+            }
+        }
+        UpdateDialogue();
 
         //Movement
         if (Input.GetMouseButton(0) && mainCardController.isMouseOver)
@@ -50,32 +89,6 @@ public class GameManager : MonoBehaviour
         {
             cardGameObject.transform.position = Vector2.MoveTowards(cardGameObject.transform.position, new Vector2(0,0), fMovingSpeed);
         }
-
-        //Checking right side
-        if (cardGameObject.transform.position.x > fSideMargin)
-        {
-            // dialogue.alpha = Mathf.Min(cardGameObject.transform.position.x, 1);
-            // dialouge.color.a = Mathf.Min(cardGameObject.transform.position.x, 1);
-            if(!Input.GetMouseButton(0) && cardGameObject.transform.position.y > fSideTrigger)
-            {
-                Debug.Log("Going left");
-            }
-        }
-        else if (cardGameObject.transform.position.x < -fSideMargin)
-        {
-            // dialogue.alpha = Mathf.Min(-cardGameObject.transform.position.x, 1);
-            if (!Input.GetMouseButton(0) && cardGameObject.transform.position.y < -fSideTrigger)
-            {
-                Debug.Log("Going right");
-            }
-        }
-        else
-        {
-            cardSpriteRenderer.color = Color.white;
-        }
-
-        // UI
-        display.text = "" + textColor.a;
     }
 
     public void LoadCard(Card card)
@@ -84,5 +97,11 @@ public class GameManager : MonoBehaviour
         leftQuote = card.leftQuote;
         rightQuote = card.rightQuote;
         currentCard = card;
+    }
+
+    public void NewCard()
+    {
+        int rollDice = Random.Range(0, resourceManager.cards.Length + 1);
+        LoadCard(resourceManager.cards[rollDice]);
     }
 }
