@@ -59,15 +59,10 @@ public class GameManager : MonoBehaviour
                 NewCard();
             }
             
-        } else if (cardGameObject.transform.position.x > fSideMargin)
-        {
-        }
-        else if (cardGameObject.transform.position.x < -fSideMargin)
+        } 
+        else if (cardGameObject.transform.position.x > -fSideMargin)
         {
             textColor.a = 0;
-        }
-        else if (cardGameObject.transform.position.x < -fSideTrigger)
-        {
         }
         else
         {
