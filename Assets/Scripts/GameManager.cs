@@ -21,8 +21,8 @@ public class GameManager : MonoBehaviour
     public float divideValue;
 
     // UI
-    public TMP_Text characterName;
-    public TMP_Text dialogue;
+    public TMP_Text characterDialogue;
+    public TMP_Text actionQuote;
 
     // Card variables
     private string leftQuote;
@@ -37,14 +37,14 @@ public class GameManager : MonoBehaviour
 
     void UpdateDialogue()
     {
-        dialogue.color = textColor;
+        actionQuote.color = textColor;
         if (cardGameObject.transform.position.x < 0)
         {
-            dialogue.text = leftQuote;
+            actionQuote.text = leftQuote;
         }
         else
         {
-            dialogue.text = rightQuote;
+            actionQuote.text = rightQuote;
         }
     }
 
@@ -92,6 +92,7 @@ public class GameManager : MonoBehaviour
         leftQuote = card.leftQuote;
         rightQuote = card.rightQuote;
         currentCard = card;
+        characterDialogue.text = card.dialogue;
     }
 
     public void NewCard()

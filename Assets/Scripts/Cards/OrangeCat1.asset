@@ -16,4 +16,6 @@ MonoBehaviour:
   leftQuote: Slide to the left
   rightQuote: Slide to the right
   cardName: OrangeCat1
+  dialogue: Up here will be the dialogue box with the photo below. The photo has
+    the options attached to the bottom of it.
   cardId: 0

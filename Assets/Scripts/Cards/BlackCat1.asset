@@ -16,4 +16,6 @@ MonoBehaviour:
   leftQuote: You're swipping left
   rightQuote: You're swiping right
   cardName: BlackCat1
+  dialogue: Currently this is randomly generated, but for the full game, we'll be
+    using storylines
   cardId: 0

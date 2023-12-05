@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 468715344c7cc75439a52c1933fc34dd
+guid: fd2de33a8019e6a4ab63fb93aa1db26d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -108,112 +108,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: Raccoon_Concept_0
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 190
-        width: 520
-        height: 770
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6f158a98cbf45384bb9ffc8a354026f1
-      internalID: -1003368898
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Raccoon_Concept_1
-      rect:
-        serializedVersion: 2
-        x: 938
-        y: 173
-        width: 520
-        height: 787
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: cfe35ded333c0dc499d7da6c881b1588
-      internalID: -1566896022
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Raccoon_Concept_2
-      rect:
-        serializedVersion: 2
-        x: 1750
-        y: 140
-        width: 520
-        height: 820
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3667d3011669be94e924fda827d267c1
-      internalID: 1999490050
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Raccoon_Concept_3
-      rect:
-        serializedVersion: 2
-        x: 2565
-        y: 156
-        width: 520
-        height: 804
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4fdb90f979b1f074cb459a295f65922a
-      internalID: -72933606
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Raccoon_Concept_4
-      rect:
-        serializedVersion: 2
-        x: 3334
-        y: 65
-        width: 520
-        height: 867
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b76e415fe663f6f439272ff60f7a8a62
-      internalID: 2041550790
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
@@ -224,12 +119,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      Raccoon_Concept_0: -1003368898
-      Raccoon_Concept_1: -1566896022
-      Raccoon_Concept_2: 1999490050
-      Raccoon_Concept_3: -72933606
-      Raccoon_Concept_4: 2041550790
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

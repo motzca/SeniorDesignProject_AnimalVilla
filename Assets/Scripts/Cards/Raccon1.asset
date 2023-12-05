@@ -16,4 +16,5 @@ MonoBehaviour:
   leftQuote: 'You are swiping left '
   rightQuote: You are swiping right
   cardName: Raccon1
+  dialogue: This is a demonstration of the unique UI of Animal Villa
   cardId: 0

@@ -16,4 +16,5 @@ MonoBehaviour:
   leftQuote: You are swiping left again
   rightQuote: You are swiping right again
   cardName: Fox1
+  dialogue: Swiping this card left or right will take you to the next card.
   cardId: 0

@@ -9,6 +9,7 @@ public class Card : ScriptableObject
     public string leftQuote;
     public string rightQuote;
     public string cardName;
+    public string dialogue;
     public int cardId;
 
     public void Left()

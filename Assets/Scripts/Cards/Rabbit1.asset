@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Rabbit1
   m_EditorClassIdentifier: 
   sprite: 4
-  leftQuote: Hopping on to the lleft
+  leftQuote: Hopping on to the left
   rightQuote: Hopping on to the right
   cardName: Rabbit1
+  dialogue: I'm a character design for a character called Cornelius!
   cardId: 0
