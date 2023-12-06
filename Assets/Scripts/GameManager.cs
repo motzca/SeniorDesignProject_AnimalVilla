@@ -5,11 +5,19 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    // Stat variables
+    public static int moneyStatus = 50;
+    public static int energyStatus = 50;
+    public static int reputationStatus = 50;
+    public static int maxValue = 100;
+    public static int minValue = 0;
+
     //Game objects
     public GameObject cardGameObject;
     public CardController mainCardController;
     public SpriteRenderer cardSpriteRenderer;
     public ResourceManager resourceManager;
+    public Vector2 defaultPositionCard;
 
     // Tweaking variables
     public float fMovingSpeed;
@@ -25,6 +33,7 @@ public class GameManager : MonoBehaviour
     public TMP_Text actionQuote;
 
     // Card variables
+    public string direction;
     private string leftQuote;
     private string rightQuote;
     public Card currentCard;
@@ -50,18 +59,24 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        // Stat values logic
+
+
+        // Dialogue text handling
         textColor.a = Mathf.Min((Mathf.Abs(cardGameObject.transform.position.x) - fSideMargin)/ divideValue, 1);
         if (cardGameObject.transform.position.x > fSideTrigger)
         {
             if (Input.GetMouseButtonUp(0))
             {
               currentCard.Right();
-                NewCard();
+              NewCard();
+              direction = "right";
             }
             
         } 
         else if (cardGameObject.transform.position.x > -fSideMargin)
         {
+            direction = "none";
             textColor.a = 0;
         }
         else
@@ -70,6 +85,7 @@ public class GameManager : MonoBehaviour
             {
                 currentCard.Left();
                 NewCard();
+                direction = "left";
             }
         }
         UpdateDialogue();
@@ -82,7 +98,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            cardGameObject.transform.position = Vector2.MoveTowards(cardGameObject.transform.position, new Vector2(0,0), fMovingSpeed);
+            cardGameObject.transform.position = Vector2.MoveTowards(cardGameObject.transform.position, defaultPositionCard, fMovingSpeed);
         }
     }
 
