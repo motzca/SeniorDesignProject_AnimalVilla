@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public SpriteRenderer cardSpriteRenderer;
     public ResourceManager resourceManager;
     public Vector2 defaultPositionCard;
+    public DialogSystem mainDialogSystem;
 
     // Tweaking variables
     public float fMovingSpeed;
@@ -113,7 +114,14 @@ public class GameManager : MonoBehaviour
 
     public void NewCard()
     {
-        int rollDice = Random.Range(0, resourceManager.cards.Length + 1);
-        LoadCard(resourceManager.cards[rollDice]);
+        DialogNode nextNode = mainDialogSystem.GetNextNode();
+
+        // Check if there is a valid dialog node
+        if (nextNode != null)
+        {
+            // Load the card based on the dialog node
+            LoadCard(nextNode.card);
+        }
+
     }
 }
