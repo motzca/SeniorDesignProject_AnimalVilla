@@ -1771,6 +1771,7 @@ GameObject:
   - component: {fileID: 1713342223}
   - component: {fileID: 1713342224}
   - component: {fileID: 1713342225}
+  - component: {fileID: 1713342226}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1810,6 +1811,7 @@ MonoBehaviour:
   cardSpriteRenderer: {fileID: 1535820223}
   resourceManager: {fileID: 1713342224}
   defaultPositionCard: {x: 0, y: -3}
+  mainDialogSystem: {fileID: 1713342226}
   fMovingSpeed: 5
   fSideMargin: 0.5
   fSideTrigger: 2
@@ -1817,6 +1819,7 @@ MonoBehaviour:
   divideValue: 3
   characterDialogue: {fileID: 1150503356}
   actionQuote: {fileID: 831318873}
+  direction: 
   currentCard: {fileID: 11400000, guid: eeb16170e9f4e0d4c886b223c9fc8c69, type: 2}
   testCard: {fileID: 11400000, guid: 3a928ca25c0297347b4e0d59ae6bf3b0, type: 2}
 --- !u!114 &1713342224
@@ -1863,6 +1866,19 @@ MonoBehaviour:
   moneyStatusImpact: {fileID: 1228864771}
   energyStatusImpact: {fileID: 252742243}
   reputationStatusImpact: {fileID: 148901969}
+--- !u!114 &1713342226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713342220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3aaf30f50309f9044832f4cb0900ea6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogNodes: []
 --- !u!1 &1741205837
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,67 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8971243940299931508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32a464d8ccff4e40a60c45b40a1e648, type: 3}
+  m_Name: Sentence Node
+  m_EditorClassIdentifier: 
+  connectedNodesList: []
+  nodeGraph: {fileID: 11400000}
+  rect:
+    serializedVersion: 2
+    x: 65
+    y: 951
+    width: 170
+    height: 115
+  isDragging: 0
+  isSelected: 0
+  sentence:
+    characterName: Intro 9
+    text: "Choose wisely, adventurer, and let your path through Animal Villa unfold.
+      The fate of your character's financial stability, energy levels, and reputation
+      rests in your hands. Are you ready to shape your destiny amidst the beauty
+      and challenges of this extraordinary village? The choice is yours to make.\_"
+    characterSprite: {fileID: 0}
+  parentNode: {fileID: 8330272602648353676}
+  childNode: {fileID: 0}
+--- !u!114 &-7474412314644690481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32a464d8ccff4e40a60c45b40a1e648, type: 3}
+  m_Name: Sentence Node
+  m_EditorClassIdentifier: 
+  connectedNodesList: []
+  nodeGraph: {fileID: 11400000}
+  rect:
+    serializedVersion: 2
+    x: 297
+    y: 295
+    width: 170
+    height: 115
+  isDragging: 0
+  isSelected: 0
+  sentence:
+    characterName: Intro 3.1
+    text: "As you step foot into Animal Villa, you are greeted by the warmth of the
+      community and the vibrant atmosphere that permeates every corner. Blooming
+      gardens, cozy treehouses, and winding paths create a picturesque backdrop for
+      the adventures that lie ahead.\_"
+    characterSprite: {fileID: 0}
+  parentNode: {fileID: -1092369294670003723}
+  childNode: {fileID: 2007921795784331938}
 --- !u!114 &-6714608328141798755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16,14 +78,14 @@ MonoBehaviour:
   nodeGraph: {fileID: 11400000}
   rect:
     serializedVersion: 2
-    x: 104
-    y: 44
+    x: 120
+    y: 140
     width: 170
     height: 115
   isDragging: 0
   isSelected: 0
   sentence:
-    characterName: Intro 1.1
+    characterName: Intro 1
     text: "Welcome to Animal Villa, a picturesque village where a world of enchantment
       awaits! As the newest resident of this extraordinary place, you are about to
       embark on a remarkable choose-your-own-adventure experience.\_"
@@ -46,8 +108,8 @@ MonoBehaviour:
   nodeGraph: {fileID: 11400000}
   rect:
     serializedVersion: 2
-    x: 303
-    y: 35
+    x: 319
+    y: 131
     width: 190
     height: 135
   isDragging: 0
@@ -59,6 +121,35 @@ MonoBehaviour:
   childSentenceNodes:
   - {fileID: -336009273432947159}
   - {fileID: -336009273432947159}
+--- !u!114 &-1346118564532069066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1717f3c6dba9fa40844ddacac301510, type: 3}
+  m_Name: Answer Node
+  m_EditorClassIdentifier: 
+  connectedNodesList: []
+  nodeGraph: {fileID: 11400000}
+  rect:
+    serializedVersion: 2
+    x: 532
+    y: 789
+    width: 190
+    height: 135
+  isDragging: 0
+  isSelected: 0
+  answers:
+  - Continue
+  - Continue
+  parentSentenceNode: {fileID: -317346206289839316}
+  childSentenceNodes:
+  - {fileID: 854849258270831438}
+  - {fileID: 854849258270831438}
 --- !u!114 &-1092369294670003723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,8 +166,8 @@ MonoBehaviour:
   nodeGraph: {fileID: 11400000}
   rect:
     serializedVersion: 2
-    x: 508
-    y: 192
+    x: 524
+    y: 285
     width: 190
     height: 135
   isDragging: 0
@@ -85,7 +176,42 @@ MonoBehaviour:
   - Continue
   - Continue
   parentSentenceNode: {fileID: -336009273432947159}
-  childSentenceNodes: []
+  childSentenceNodes:
+  - {fileID: -7474412314644690481}
+  - {fileID: -7474412314644690481}
+--- !u!114 &-1027927992598322707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32a464d8ccff4e40a60c45b40a1e648, type: 3}
+  m_Name: Sentence Node
+  m_EditorClassIdentifier: 
+  connectedNodesList: []
+  nodeGraph: {fileID: 11400000}
+  rect:
+    serializedVersion: 2
+    x: 73
+    y: 639
+    width: 170
+    height: 115
+  isDragging: 0
+  isSelected: 0
+  sentence:
+    characterName: Intro 6
+    text: "Energy is a precious commodity in Animal Villa, and managing it wisely
+      is crucial. Each task you undertake requires a certain amount of energy, and
+      as you explore the village, you'll need to balance your activities to avoid
+      exhaustion. Will you prioritize rest and self-care, ensuring you have enough
+      energy to tackle the challenges that lie ahead? Or will you risk burning out,
+      leaving yourself vulnerable and unable to seize opportunities?\_"
+    characterSprite: {fileID: 0}
+  parentNode: {fileID: 193353618315348254}
+  childNode: {fileID: 2863382391150115348}
 --- !u!114 &-336009273432947159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102,14 +228,14 @@ MonoBehaviour:
   nodeGraph: {fileID: 11400000}
   rect:
     serializedVersion: 2
-    x: 518
-    y: 47
+    x: 534
+    y: 143
     width: 170
     height: 115
   isDragging: 0
   isSelected: 0
   sentence:
-    characterName: Intro 1.2
+    characterName: Intro 2
     text: "Animal Villa is a haven nestled in the heart of nature, where animals
       of all shapes, sizes, and species coexist in harmony. From wise old tortoises
       to agile squirrels, mischievous raccoons to graceful deer, the village is teeming
@@ -118,6 +244,68 @@ MonoBehaviour:
     characterSprite: {fileID: 0}
   parentNode: {fileID: -4194095976597951493}
   childNode: {fileID: -1092369294670003723}
+--- !u!114 &-317346206289839316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32a464d8ccff4e40a60c45b40a1e648, type: 3}
+  m_Name: Sentence Node
+  m_EditorClassIdentifier: 
+  connectedNodesList: []
+  nodeGraph: {fileID: 11400000}
+  rect:
+    serializedVersion: 2
+    x: 305
+    y: 802
+    width: 170
+    height: 115
+  isDragging: 0
+  isSelected: 0
+  sentence:
+    characterName: Intro 7
+    text: "Your reputation within the village will shape your relationships and the
+      way others perceive you. Act with integrity and kindness, and you'll gain the
+      trust and respect of the animal residents. However, make choices that harm
+      or deceive others, and your reputation may suffer, leading to isolating consequences.
+      Will you be known as a reliable and compassionate neighbor, or will your actions
+      tarnish your standing in the community?\_"
+    characterSprite: {fileID: 0}
+  parentNode: {fileID: 2863382391150115348}
+  childNode: {fileID: -1346118564532069066}
+--- !u!114 &-72128396472285473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1717f3c6dba9fa40844ddacac301510, type: 3}
+  m_Name: Answer Node
+  m_EditorClassIdentifier: 
+  connectedNodesList: []
+  nodeGraph: {fileID: 11400000}
+  rect:
+    serializedVersion: 2
+    x: 76
+    y: 461
+    width: 190
+    height: 135
+  isDragging: 0
+  isSelected: 0
+  answers:
+  - Continue
+  - Continue
+  parentSentenceNode: {fileID: 2007921795784331938}
+  childSentenceNodes:
+  - {fileID: 4325148834484484740}
+  - {fileID: 4325148834484484740}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,5 +323,261 @@ MonoBehaviour:
   - {fileID: -4194095976597951493}
   - {fileID: -336009273432947159}
   - {fileID: -1092369294670003723}
+  - {fileID: -7474412314644690481}
+  - {fileID: 2007921795784331938}
+  - {fileID: 4325148834484484740}
+  - {fileID: -72128396472285473}
+  - {fileID: 3598156054632052446}
+  - {fileID: 4794296835968296620}
+  - {fileID: 193353618315348254}
+  - {fileID: -1027927992598322707}
+  - {fileID: 2863382391150115348}
+  - {fileID: -317346206289839316}
+  - {fileID: -1346118564532069066}
+  - {fileID: 854849258270831438}
+  - {fileID: 8330272602648353676}
+  - {fileID: -8971243940299931508}
   nodeToDrawLineFrom: {fileID: 0}
   linePosition: {x: 0, y: 0}
+--- !u!114 &193353618315348254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1717f3c6dba9fa40844ddacac301510, type: 3}
+  m_Name: Answer Node
+  m_EditorClassIdentifier: 
+  connectedNodesList: []
+  nodeGraph: {fileID: 11400000}
+  rect:
+    serializedVersion: 2
+    x: 290
+    y: 631
+    width: 190
+    height: 135
+  isDragging: 0
+  isSelected: 0
+  answers:
+  - Continue
+  - Continue
+  parentSentenceNode: {fileID: 4794296835968296620}
+  childSentenceNodes:
+  - {fileID: -1027927992598322707}
+--- !u!114 &854849258270831438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32a464d8ccff4e40a60c45b40a1e648, type: 3}
+  m_Name: Sentence Node
+  m_EditorClassIdentifier: 
+  connectedNodesList: []
+  nodeGraph: {fileID: 11400000}
+  rect:
+    serializedVersion: 2
+    x: 543
+    y: 953
+    width: 170
+    height: 115
+  isDragging: 0
+  isSelected: 0
+  sentence:
+    characterName: Intro 8
+    text: "Remember, Animal Villa is a world that reacts to your decisions. There
+      are bad endings that can befall you if you neglect these crucial aspects of
+      your journey. However, with careful consideration and resource management,
+      you can pave the way for a successful and fulfilling adventure.\_"
+    characterSprite: {fileID: 0}
+  parentNode: {fileID: -1346118564532069066}
+  childNode: {fileID: 8330272602648353676}
+--- !u!114 &2007921795784331938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32a464d8ccff4e40a60c45b40a1e648, type: 3}
+  m_Name: Sentence Node
+  m_EditorClassIdentifier: 
+  connectedNodesList: []
+  nodeGraph: {fileID: 11400000}
+  rect:
+    serializedVersion: 2
+    x: 86
+    y: 292
+    width: 170
+    height: 115
+  isDragging: 0
+  isSelected: 0
+  sentence:
+    characterName: Intro 3.2
+    text: "In this immersive journey, you hold the key to shaping your destiny. Every
+      decision you make will influence the course of your story, leading you down
+      unexpected paths and revealing the hidden wonders of Animal Villa. Will you
+      become an integral part of the village, forming meaningful friendships and
+      participating in joyous festivals? Or will you embark on daring quests, uncovering
+      ancient secrets and solving intriguing mysteries?\_"
+    characterSprite: {fileID: 0}
+  parentNode: {fileID: -7474412314644690481}
+  childNode: {fileID: -72128396472285473}
+--- !u!114 &2863382391150115348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1717f3c6dba9fa40844ddacac301510, type: 3}
+  m_Name: Answer Node
+  m_EditorClassIdentifier: 
+  connectedNodesList: []
+  nodeGraph: {fileID: 11400000}
+  rect:
+    serializedVersion: 2
+    x: 62
+    y: 790
+    width: 190
+    height: 135
+  isDragging: 0
+  isSelected: 0
+  answers:
+  - Continue
+  - Continue
+  parentSentenceNode: {fileID: -1027927992598322707}
+  childSentenceNodes:
+  - {fileID: -317346206289839316}
+  - {fileID: -317346206289839316}
+--- !u!114 &3598156054632052446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1717f3c6dba9fa40844ddacac301510, type: 3}
+  m_Name: Answer Node
+  m_EditorClassIdentifier: 
+  connectedNodesList: []
+  nodeGraph: {fileID: 11400000}
+  rect:
+    serializedVersion: 2
+    x: 524
+    y: 472
+    width: 190
+    height: 135
+  isDragging: 0
+  isSelected: 0
+  answers:
+  - Continue
+  - Continue
+  parentSentenceNode: {fileID: 4325148834484484740}
+  childSentenceNodes:
+  - {fileID: 4794296835968296620}
+  - {fileID: 4794296835968296620}
+--- !u!114 &4325148834484484740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32a464d8ccff4e40a60c45b40a1e648, type: 3}
+  m_Name: Sentence Node
+  m_EditorClassIdentifier: 
+  connectedNodesList: []
+  nodeGraph: {fileID: 11400000}
+  rect:
+    serializedVersion: 2
+    x: 299
+    y: 473
+    width: 170
+    height: 115
+  isDragging: 0
+  isSelected: 0
+  sentence:
+    characterName: Intro 4
+    text: "Be wary, as this is a place where your choices have real consequences.
+      As you navigate through this choose-your-own-adventure game, you will discover
+      that your decisions regarding money, energy, and reputation can lead to both
+      triumph and tribulation.\_"
+    characterSprite: {fileID: 0}
+  parentNode: {fileID: -72128396472285473}
+  childNode: {fileID: 3598156054632052446}
+--- !u!114 &4794296835968296620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32a464d8ccff4e40a60c45b40a1e648, type: 3}
+  m_Name: Sentence Node
+  m_EditorClassIdentifier: 
+  connectedNodesList: []
+  nodeGraph: {fileID: 11400000}
+  rect:
+    serializedVersion: 2
+    x: 539
+    y: 632
+    width: 170
+    height: 115
+  isDragging: 0
+  isSelected: 0
+  sentence:
+    characterName: Intro 5
+    text: "In this vibrant village, your financial resources play a significant role.
+      Be mindful of how you spend and invest your money, as it can determine your
+      fate. Will you save up diligently, making wise investments and securing a prosperous
+      future? Or will you find yourself in dire straits, struggling to make ends
+      meet?\_"
+    characterSprite: {fileID: 0}
+  parentNode: {fileID: 3598156054632052446}
+  childNode: {fileID: 193353618315348254}
+--- !u!114 &8330272602648353676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1717f3c6dba9fa40844ddacac301510, type: 3}
+  m_Name: Answer Node
+  m_EditorClassIdentifier: 
+  connectedNodesList: []
+  nodeGraph: {fileID: 11400000}
+  rect:
+    serializedVersion: 2
+    x: 295
+    y: 939
+    width: 190
+    height: 135
+  isDragging: 0
+  isSelected: 0
+  answers:
+  - Continue
+  - Continue
+  parentSentenceNode: {fileID: 854849258270831438}
+  childSentenceNodes:
+  - {fileID: -8971243940299931508}
+  - {fileID: -8971243940299931508}
