@@ -7,7 +7,7 @@ public class InterfaceManager : MonoBehaviour
 {
     // Card
     public GameManager gameManager;
-    public GameObject card;
+    public DialogManager dialogManager;
 
     // UI icons
     public Image moneyStatus;
@@ -22,36 +22,50 @@ public class InterfaceManager : MonoBehaviour
     void Update()
     {
         // UI icons
-        moneyStatus.fillAmount = (float) GameManager.moneyStatus / GameManager.maxValue;
-        energyStatus.fillAmount = (float) GameManager.energyStatus / GameManager.maxValue;
-        reputationStatus.fillAmount = (float) GameManager.reputationStatus / GameManager.maxValue;
+        moneyStatus.fillAmount = (float)GameManager.moneyStatus / GameManager.maxValue;
+        energyStatus.fillAmount = (float)GameManager.energyStatus / GameManager.maxValue;
+        reputationStatus.fillAmount = (float)GameManager.reputationStatus / GameManager.maxValue;
 
         // UI impact
-        //Right
-        if(gameManager.direction == "right")
+        DialogNode currentDialogNode = gameManager.dialogSystem.GetCurrentNode();
+
+        if (currentDialogNode != null)
         {
-            if (gameManager.currentCard.moneyStatRight != 0)
-                moneyStatusImpact.transform.localScale = new Vector3(1, 1, 0);
-            if (gameManager.currentCard.energyStatRight != 0)
-                energyStatusImpact.transform.localScale = new Vector3(1, 1, 0);
-            if (gameManager.currentCard.reputationStatRight != 0)
-                reputationStatusImpact.transform.localScale = new Vector3(1, 1, 0);
-        }
-        //Left
-        else if (gameManager.direction == "left")
-        {
-            if (gameManager.currentCard.moneyStatLeft != 0)
-                moneyStatusImpact.transform.localScale = new Vector3(1, 1, 0);
-            if (gameManager.currentCard.energyStatLeft != 0)
-                energyStatusImpact.transform.localScale = new Vector3(1, 1, 0);
-            if (gameManager.currentCard.reputationStatLeft != 0)
-                reputationStatusImpact.transform.localScale = new Vector3(1, 1, 0);
-        }
-        else
-        {
-            moneyStatusImpact.transform.localScale = new Vector3(0, 0, 0);
-            energyStatusImpact.transform.localScale = new Vector3(0, 0, 0);
-            reputationStatusImpact.transform.localScale = new Vector3(0, 0, 0);
+            Card currentCard = currentDialogNode.card;
+
+            // Right
+            if (gameManager.direction == "right")
+            {
+                SetImpactIconScale(currentCard.moneyStatRight, moneyStatusImpact);
+                SetImpactIconScale(currentCard.energyStatRight, energyStatusImpact);
+                SetImpactIconScale(currentCard.reputationStatRight, reputationStatusImpact);
+                dialogManager.StartDialog();
+            }
+            // Left
+            else if (gameManager.direction == "left")
+            {
+                SetImpactIconScale(currentCard.moneyStatLeft, moneyStatusImpact);
+                SetImpactIconScale(currentCard.energyStatLeft, energyStatusImpact);
+                SetImpactIconScale(currentCard.reputationStatLeft, reputationStatusImpact);
+                dialogManager.StartDialog();
+            }
+            else
+            {
+                ResetImpactIcons();
+            }
         }
     }
+
+    private void SetImpactIconScale(int statValue, Image icon)
+    {
+        icon.transform.localScale = (statValue != 0) ? new Vector3(1, 1, 0) : new Vector3(0, 0, 0);
+    }
+
+    private void ResetImpactIcons()
+    {
+        moneyStatusImpact.transform.localScale = new Vector3(0, 0, 0);
+        energyStatusImpact.transform.localScale = new Vector3(0, 0, 0);
+        reputationStatusImpact.transform.localScale = new Vector3(0, 0, 0);
+    }
 }
+

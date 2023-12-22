@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     public SpriteRenderer cardSpriteRenderer;
     public ResourceManager resourceManager;
     public Vector2 defaultPositionCard;
-    public DialogSystem mainDialogSystem;
+    public DialogManager dialogManager;
 
     // Tweaking variables
     public float fMovingSpeed;
@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         LoadCard(testCard);
+        characterDialogue.text = testCard.sentenceText;
     }
 
     void UpdateDialogue()
@@ -60,21 +61,17 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        // Stat values logic
-
-
-        // Dialogue text handling
-        textColor.a = Mathf.Min((Mathf.Abs(cardGameObject.transform.position.x) - fSideMargin)/ divideValue, 1);
+        textColor.a = Mathf.Min((Mathf.Abs(cardGameObject.transform.position.x) - fSideMargin) / divideValue, 1);
         if (cardGameObject.transform.position.x > fSideTrigger)
         {
             if (Input.GetMouseButtonUp(0))
             {
-              currentCard.Right();
-              NewCard();
-              direction = "right";
+                currentCard.Right();
+                NewCard();
+                direction = "right";
             }
-            
-        } 
+
+        }
         else if (cardGameObject.transform.position.x > -fSideMargin)
         {
             direction = "none";
@@ -114,14 +111,7 @@ public class GameManager : MonoBehaviour
 
     public void NewCard()
     {
-        DialogNode nextNode = mainDialogSystem.GetNextNode();
-
-        // Check if there is a valid dialog node
-        if (nextNode != null)
-        {
-            // Load the card based on the dialog node
-            LoadCard(nextNode.card);
-        }
-
+        int rollDice = Random.Range(0, resourceManager.cards.Length + 1);
+        LoadCard(resourceManager.cards[rollDice]);
     }
 }

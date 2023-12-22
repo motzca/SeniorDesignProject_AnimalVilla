@@ -13,6 +13,11 @@ public class Card : ScriptableObject
     public string dialogue;
     public int cardId;
 
+    //Dialog values
+    public string sentenceText;
+    public DialogNode leftChoiceNode;
+    public DialogNode rightChoiceNode;
+
     // Stat values - left swipe
     public int moneyStatLeft;
     public int energyStatLeft;
@@ -26,6 +31,9 @@ public class Card : ScriptableObject
     public void Left()
     {
         Debug.Log(cardName + "swipped left");
+        GameManager.characterDialogue.text = leftChoiceNode.card.sentenceText;
+        GameManager.dialogManager.LoadDialogNode(leftChoiceNode);
+
 
         // Appending the values for the left
         GameManager.moneyStatus += moneyStatLeft;
@@ -36,6 +44,8 @@ public class Card : ScriptableObject
     public void Right()
     {
         Debug.Log(cardName + "swipped right");
+        GameManager.characterDialogue.text = rightChoiceNode.card.sentenceText;
+        GameManager.dialogManager.LoadDialogNode(rightChoiceNode);
 
         // Appending the values for the right
         GameManager.moneyStatus += moneyStatRight;
