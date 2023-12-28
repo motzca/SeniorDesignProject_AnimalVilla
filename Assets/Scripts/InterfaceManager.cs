@@ -22,13 +22,13 @@ public class InterfaceManager : MonoBehaviour
     void Update()
     {
         // UI icons
-        moneyStatus.fillAmount = (float) GameManager.moneyStatus / GameManager.maxValue;
-        energyStatus.fillAmount = (float) GameManager.energyStatus / GameManager.maxValue;
-        reputationStatus.fillAmount = (float) GameManager.reputationStatus / GameManager.maxValue;
+        moneyStatus.fillAmount = (float)GameManager.moneyStatus / GameManager.maxValue;
+        energyStatus.fillAmount = (float)GameManager.energyStatus / GameManager.maxValue;
+        reputationStatus.fillAmount = (float)GameManager.reputationStatus / GameManager.maxValue;
 
         // UI impact
         //Right
-        if(gameManager.direction == "right")
+        if (Input.GetMouseButtonUp(0) && gameManager.currentCard != null)
         {
             if (gameManager.currentCard.moneyStatRight != 0)
                 moneyStatusImpact.transform.localScale = new Vector3(1, 1, 0);
@@ -38,7 +38,7 @@ public class InterfaceManager : MonoBehaviour
                 reputationStatusImpact.transform.localScale = new Vector3(1, 1, 0);
         }
         //Left
-        else if (gameManager.direction == "left")
+        else if (Input.GetMouseButtonUp(0) && gameManager.currentCard != null)
         {
             if (gameManager.currentCard.moneyStatLeft != 0)
                 moneyStatusImpact.transform.localScale = new Vector3(1, 1, 0);
@@ -54,4 +54,5 @@ public class InterfaceManager : MonoBehaviour
             reputationStatusImpact.transform.localScale = new Vector3(0, 0, 0);
         }
     }
+
 }

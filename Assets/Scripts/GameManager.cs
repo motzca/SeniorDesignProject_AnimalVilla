@@ -116,4 +116,19 @@ public class GameManager : MonoBehaviour
         int rollDice = Random.Range(0, resourceManager.cards.Length + 1);
         LoadCard(resourceManager.cards[rollDice]);
     }
+
+    public void HandleChoice(DialogChoice choice)
+    {
+        if (choice.ID == "left")
+        {
+            currentCard.Left();
+        }
+        else if (choice.ID == "right")
+        {
+            currentCard.Right();
+        }
+
+        NewCard();
+    }
+
 }
