@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using DialogueEditor;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour
     public SpriteRenderer cardSpriteRenderer;
     public ResourceManager resourceManager;
     public Vector2 defaultPositionCard;
+    private NPCConversation npcConversation;
 
     // Tweaking variables
     public float fMovingSpeed;
@@ -39,9 +41,18 @@ public class GameManager : MonoBehaviour
     public Card currentCard;
     public Card testCard;
 
+    void StartConversation()
+    {
+        if (ConversationManager.Instance != null)
+        {
+            ConversationManager.Instance.StartConversation(npcConversation);  // Use npcConversation directly
+        }
+    }
+
     void Start()
     {
-        LoadCard(testCard);
+        npcConversation = GetComponent<NPCConversation>();
+        StartConversation();
     }
 
     void UpdateDialogue()
