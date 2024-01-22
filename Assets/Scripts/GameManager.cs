@@ -1,52 +1,89 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    // Stat variables
-    public static int moneyStatus = 50;
-    public static int energyStatus = 50;
-    public static int reputationStatus = 50;
-    public static int maxValue = 100;
-    public static int minValue = 0;
+    public static int MoneyStatus { get; private set; } = 50;
+    public static int EnergyStatus { get; private set; } = 50;
+    public static int ReputationStatus { get; private set; } = 50;
+    public static readonly int MaxValue = 100;
+    public static readonly int MinValue = 0;
 
-    //Game objects
     public GameObject cardGameObject;
     public CardController mainCardController;
     public SpriteRenderer cardSpriteRenderer;
     public ResourceManager resourceManager;
     public Vector2 defaultPositionCard;
 
-    // Tweaking variables
-    public float fMovingSpeed;
-    public float fSideMargin;
-    public float fSideTrigger;
-    Vector3 pos;
-    float alphaText;
+    public float movingSpeed;
+    public float sideMargin;
+    public float sideTrigger;
     public Color textColor;
     public float divideValue;
 
-    // UI
     public TMP_Text characterDialogue;
     public TMP_Text actionQuote;
 
-    // Card variables
-    public string direction;
+    private string direction;
     private string leftQuote;
     private string rightQuote;
-    public Card currentCard;
+    private Card currentCard;
     public Card testCard;
 
     void Start()
     {
+        Card.OnLeftSwipe += HandleLeftSwipe;
+        Card.OnRightSwipe += HandleRightSwipe;
         LoadCard(testCard);
     }
 
-    void UpdateDialogue()
+    void OnDestroy()
     {
+        Card.OnLeftSwipe -= HandleLeftSwipe;
+        Card.OnRightSwipe -= HandleRightSwipe;
+    }
+
+    void Update()
+    {
+        HandleCardInput();
+        UpdateCardPosition();
+        UpdateDialogue();
+    }
+
+    private void HandleCardInput()
+    {
+        if (cardGameObject.transform.position.x > sideTrigger && Input.GetMouseButtonUp(0))
+        {
+            currentCard.ApplyRightEffect();
+        }
+        else if (cardGameObject.transform.position.x < -sideMargin && Input.GetMouseButtonUp(0))
+        {
+            currentCard.ApplyLeftEffect();
+        }
+        else
+        {
+            direction = "none";
+        }
+    }
+
+    private void UpdateCardPosition()
+    {
+        if (Input.GetMouseButton(0) && mainCardController.isMouseOver)
+        {
+            Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            cardGameObject.transform.position = pos;
+        }
+        else
+        {
+            cardGameObject.transform.position = Vector2.MoveTowards(cardGameObject.transform.position, defaultPositionCard, movingSpeed);
+        }
+    }
+
+    private void UpdateDialogue()
+    {
+        textColor.a = Mathf.Min((Mathf.Abs(cardGameObject.transform.position.x) - sideMargin) / divideValue, 1);
         actionQuote.color = textColor;
+
         if (cardGameObject.transform.position.x < 0)
         {
             actionQuote.text = leftQuote;
@@ -57,49 +94,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void Update()
+    private void HandleLeftSwipe(Card card)
     {
-        // Stat values logic
+        MoneyStatus = Mathf.Clamp(MoneyStatus + card.moneyStatLeft, MinValue, MaxValue);
+        EnergyStatus = Mathf.Clamp(EnergyStatus + card.energyStatLeft, MinValue, MaxValue);
+        ReputationStatus = Mathf.Clamp(ReputationStatus + card.reputationStatLeft, MinValue, MaxValue);
+        NewCard();
+        direction = "left";
+    }
 
-
-        // Dialogue text handling
-        textColor.a = Mathf.Min((Mathf.Abs(cardGameObject.transform.position.x) - fSideMargin)/ divideValue, 1);
-        if (cardGameObject.transform.position.x > fSideTrigger)
-        {
-            if (Input.GetMouseButtonUp(0))
-            {
-              currentCard.Right();
-              NewCard();
-              direction = "right";
-            }
-            
-        } 
-        else if (cardGameObject.transform.position.x > -fSideMargin)
-        {
-            direction = "none";
-            textColor.a = 0;
-        }
-        else
-        {
-            if (Input.GetMouseButtonUp(0))
-            {
-                currentCard.Left();
-                NewCard();
-                direction = "left";
-            }
-        }
-        UpdateDialogue();
-
-        //Movement
-        if (Input.GetMouseButton(0) && mainCardController.isMouseOver)
-        {
-            Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            cardGameObject.transform.position = pos;
-        }
-        else
-        {
-            cardGameObject.transform.position = Vector2.MoveTowards(cardGameObject.transform.position, defaultPositionCard, fMovingSpeed);
-        }
+    private void HandleRightSwipe(Card card)
+    {
+        MoneyStatus = Mathf.Clamp(MoneyStatus + card.moneyStatRight, MinValue, MaxValue);
+        EnergyStatus = Mathf.Clamp(EnergyStatus + card.energyStatRight, MinValue, MaxValue);
+        ReputationStatus = Mathf.Clamp(ReputationStatus + card.reputationStatRight, MinValue, MaxValue);
+        NewCard();
+        direction = "right";
     }
 
     public void LoadCard(Card card)
@@ -113,7 +123,7 @@ public class GameManager : MonoBehaviour
 
     public void NewCard()
     {
-        int rollDice = Random.Range(0, resourceManager.cards.Length + 1);
+        int rollDice = Random.Range(0, resourceManager.cards.Length);
         LoadCard(resourceManager.cards[rollDice]);
     }
 }

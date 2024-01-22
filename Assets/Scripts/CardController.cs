@@ -1,16 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CardController : MonoBehaviour
 {
     public Card card;
-    BoxCollider2D thisCard;
-    public bool isMouseOver;
+    private BoxCollider2D thisCard;
+    private bool isMouseOver;
 
     private void Start()
     {
-        thisCard = gameObject.GetComponent<BoxCollider2D>();
+        thisCard = GetComponent<BoxCollider2D>();
     }
 
     private void OnMouseOver()
@@ -22,13 +20,4 @@ public class CardController : MonoBehaviour
     {
         isMouseOver = false;
     }
-}
-
-public enum CardSprite
-{
-    RACCON,
-    FOX,
-    ORANGECAT,
-    BLACKCAT,
-    RABBIT
 }

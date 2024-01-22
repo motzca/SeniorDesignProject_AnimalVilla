@@ -1,57 +1,57 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class InterfaceManager : MonoBehaviour
 {
-    // Card
     public GameManager gameManager;
     public GameObject card;
 
-    // UI icons
     public Image moneyStatus;
     public Image energyStatus;
     public Image reputationStatus;
 
-    // UI impact icons
     public Image moneyStatusImpact;
     public Image energyStatusImpact;
     public Image reputationStatusImpact;
 
     void Update()
     {
-        // UI icons
-        moneyStatus.fillAmount = (float) GameManager.moneyStatus / GameManager.maxValue;
-        energyStatus.fillAmount = (float) GameManager.energyStatus / GameManager.maxValue;
-        reputationStatus.fillAmount = (float) GameManager.reputationStatus / GameManager.maxValue;
+        moneyStatus.fillAmount = (float)GameManager.MoneyStatus / GameManager.MaxValue;
+        energyStatus.fillAmount = (float)GameManager.EnergyStatus / GameManager.MaxValue;
+        reputationStatus.fillAmount = (float)GameManager.ReputationStatus / GameManager.MaxValue;
 
-        // UI impact
-        //Right
+        UpdateImpactIcons();
+    }
+
+    private void UpdateImpactIcons()
+    {
         if(gameManager.direction == "right")
         {
-            if (gameManager.currentCard.moneyStatRight != 0)
-                moneyStatusImpact.transform.localScale = new Vector3(1, 1, 0);
-            if (gameManager.currentCard.energyStatRight != 0)
-                energyStatusImpact.transform.localScale = new Vector3(1, 1, 0);
-            if (gameManager.currentCard.reputationStatRight != 0)
-                reputationStatusImpact.transform.localScale = new Vector3(1, 1, 0);
+            UpdateImpactIcon(moneyStatusImpact, gameManager.currentCard.moneyStatRight);
+            UpdateImpactIcon(energyStatusImpact, gameManager.currentCard.energyStatRight);
+            UpdateImpactIcon(reputationStatusImpact, gameManager.currentCard.reputationStatRight);
         }
-        //Left
         else if (gameManager.direction == "left")
         {
-            if (gameManager.currentCard.moneyStatLeft != 0)
-                moneyStatusImpact.transform.localScale = new Vector3(1, 1, 0);
-            if (gameManager.currentCard.energyStatLeft != 0)
-                energyStatusImpact.transform.localScale = new Vector3(1, 1, 0);
-            if (gameManager.currentCard.reputationStatLeft != 0)
-                reputationStatusImpact.transform.localScale = new Vector3(1, 1, 0);
+            UpdateImpactIcon(moneyStatusImpact, gameManager.currentCard.moneyStatLeft);
+            UpdateImpactIcon(energyStatusImpact, gameManager.currentCard.energyStatLeft);
+            UpdateImpactIcon(reputationStatusImpact, gameManager.currentCard.reputationStatLeft);
         }
         else
         {
-            moneyStatusImpact.transform.localScale = new Vector3(0, 0, 0);
-            energyStatusImpact.transform.localScale = new Vector3(0, 0, 0);
-            reputationStatusImpact.transform.localScale = new Vector3(0, 0, 0);
+            ResetImpactIcons();
         }
+    }
+
+    private void UpdateImpactIcon(Image impactIcon, int statChange)
+    {
+        impactIcon.transform.localScale = statChange != 0 ? new Vector3(1, 1, 0) : Vector3.zero;
+    }
+
+    private void ResetImpactIcons()
+    {
+        moneyStatusImpact.transform.localScale = Vector3.zero;
+        energyStatusImpact.transform.localScale = Vector3.zero;
+        reputationStatusImpact.transform.localScale = Vector3.zero;
     }
 }
