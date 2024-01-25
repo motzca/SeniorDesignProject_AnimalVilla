@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviour
     public CardController mainCardController;
     public SpriteRenderer cardSpriteRenderer;
     public ResourceManager resourceManager;
-    public Vector2 defaultPositionCard = new Vector2(0, 1);
+    public Vector2 defaultPositionCard;
+
     public float movingSpeed;
     public float sideMargin;
     public float sideTrigger;
@@ -34,7 +35,7 @@ public class GameManager : MonoBehaviour
         Card.OnLeftSwipe += HandleLeftSwipe;
         Card.OnRightSwipe += HandleRightSwipe;
         LoadCard(testCard);
-        ResetCardPosition();
+        ResetCardToDefault();
     }
 
     void OnDestroy()
@@ -55,10 +56,14 @@ public class GameManager : MonoBehaviour
         if (cardGameObject.transform.position.x > sideTrigger && Input.GetMouseButtonUp(0))
         {
             CurrentCard.ApplyRightEffect();
+            Direction = "right";
+            ResetCardToDefault();
         }
         else if (cardGameObject.transform.position.x < -sideMargin && Input.GetMouseButtonUp(0))
         {
             CurrentCard.ApplyLeftEffect();
+            Direction = "left";
+            ResetCardToDefault();
         }
         else
         {
@@ -70,14 +75,34 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetMouseButton(0) && mainCardController.IsMouseOver)
         {
-            Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            cardGameObject.transform.position = pos;
+            if (!isSwiping)
+            {
+                verticalSwipeDirection = Random.Range(0, 2) * 2 - 1;
+                isSwiping = true;
+            }
+
+            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            float horizontalDistance = mousePosition.x - defaultPositionCard.x;
+
+            float verticalMovement = horizontalDistance * verticalSwipeDirection * 0.8f;
+
+            Vector2 newPosition = new Vector2(mousePosition.x, defaultPositionCard.y + verticalMovement);
+            cardGameObject.transform.position = newPosition;
+
+            float rotationAngle = horizontalDistance * 10.0f; 
+            cardGameObject.transform.rotation = Quaternion.Euler(0, 0, rotationAngle);
         }
-        else
+        else if (isSwiping)
         {
             cardGameObject.transform.position = Vector2.MoveTowards(cardGameObject.transform.position, defaultPositionCard, movingSpeed);
+            cardGameObject.transform.rotation = Quaternion.Slerp(cardGameObject.transform.rotation, Quaternion.identity, movingSpeed * Time.deltaTime);
+            isSwiping = false;
         }
     }
+
+    private int verticalSwipeDirection = 1;
+    private bool isSwiping = false; 
+
 
     private void UpdateDialogue()
     {
@@ -96,20 +121,22 @@ public class GameManager : MonoBehaviour
 
     private void HandleLeftSwipe(Card card)
     {
-        MoneyStatus = Mathf.Clamp(MoneyStatus + card.moneyStatLeft, MinValue, MaxValue);
-        EnergyStatus = Mathf.Clamp(EnergyStatus + card.energyStatLeft, MinValue, MaxValue);
-        ReputationStatus = Mathf.Clamp(ReputationStatus + card.reputationStatLeft, MinValue, MaxValue);
-        NewCard();
+        ApplyCardEffect(card, card.moneyStatLeft, card.energyStatLeft, card.reputationStatLeft);
         Direction = "left";
     }
 
     private void HandleRightSwipe(Card card)
     {
-        MoneyStatus = Mathf.Clamp(MoneyStatus + card.moneyStatRight, MinValue, MaxValue);
-        EnergyStatus = Mathf.Clamp(EnergyStatus + card.energyStatRight, MinValue, MaxValue);
-        ReputationStatus = Mathf.Clamp(ReputationStatus + card.reputationStatRight, MinValue, MaxValue);
-        NewCard();
+        ApplyCardEffect(card, card.moneyStatRight, card.energyStatRight, card.reputationStatRight);
         Direction = "right";
+    }
+
+    private void ApplyCardEffect(Card card, int moneyStat, int energyStat, int reputationStat)
+    {
+        MoneyStatus = Mathf.Clamp(MoneyStatus + moneyStat, MinValue, MaxValue);
+        EnergyStatus = Mathf.Clamp(EnergyStatus + energyStat, MinValue, MaxValue);
+        ReputationStatus = Mathf.Clamp(ReputationStatus + reputationStat, MinValue, MaxValue);
+        NewCard();
     }
 
     public void LoadCard(Card card)
@@ -125,11 +152,12 @@ public class GameManager : MonoBehaviour
     {
         int rollDice = Random.Range(0, resourceManager.cards.Length);
         LoadCard(resourceManager.cards[rollDice]);
-        ResetCardPosition();
+        ResetCardToDefault();
     }
 
-    private void ResetCardPosition()
+    private void ResetCardToDefault()
     {
         cardGameObject.transform.position = defaultPositionCard;
+        cardGameObject.transform.rotation = Quaternion.identity;
     }
 }
