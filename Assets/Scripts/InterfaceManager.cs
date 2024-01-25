@@ -25,17 +25,29 @@ public class InterfaceManager : MonoBehaviour
 
     private void UpdateImpactIcons()
     {
-        if(gameManager.direction == "right")
+        if (gameManager == null)
         {
-            UpdateImpactIcon(moneyStatusImpact, gameManager.currentCard.moneyStatRight);
-            UpdateImpactIcon(energyStatusImpact, gameManager.currentCard.energyStatRight);
-            UpdateImpactIcon(reputationStatusImpact, gameManager.currentCard.reputationStatRight);
+            Debug.LogError("GameManager is not assigned in InterfaceManager.");
+            return;
         }
-        else if (gameManager.direction == "left")
+
+        if (gameManager.CurrentCard == null)
         {
-            UpdateImpactIcon(moneyStatusImpact, gameManager.currentCard.moneyStatLeft);
-            UpdateImpactIcon(energyStatusImpact, gameManager.currentCard.energyStatLeft);
-            UpdateImpactIcon(reputationStatusImpact, gameManager.currentCard.reputationStatLeft);
+            Debug.LogError("CurrentCard is null in GameManager.");
+            return;
+        }
+
+        if (gameManager.Direction == "right")
+        {
+            UpdateImpactIcon(moneyStatusImpact, gameManager.CurrentCard.moneyStatRight);
+            UpdateImpactIcon(energyStatusImpact, gameManager.CurrentCard.energyStatRight);
+            UpdateImpactIcon(reputationStatusImpact, gameManager.CurrentCard.reputationStatRight);
+        }
+        else if (gameManager.Direction == "left")
+        {
+            UpdateImpactIcon(moneyStatusImpact, gameManager.CurrentCard.moneyStatLeft);
+            UpdateImpactIcon(energyStatusImpact, gameManager.CurrentCard.energyStatLeft);
+            UpdateImpactIcon(reputationStatusImpact, gameManager.CurrentCard.reputationStatLeft);
         }
         else
         {

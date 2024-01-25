@@ -13,8 +13,7 @@ public class GameManager : MonoBehaviour
     public CardController mainCardController;
     public SpriteRenderer cardSpriteRenderer;
     public ResourceManager resourceManager;
-    public Vector2 defaultPositionCard;
-
+    public Vector2 defaultPositionCard = new Vector2(0, 1);
     public float movingSpeed;
     public float sideMargin;
     public float sideTrigger;
@@ -24,10 +23,10 @@ public class GameManager : MonoBehaviour
     public TMP_Text characterDialogue;
     public TMP_Text actionQuote;
 
-    private string direction;
+    public string Direction { get; private set; }
     private string leftQuote;
     private string rightQuote;
-    private Card currentCard;
+    public Card CurrentCard { get; private set; }
     public Card testCard;
 
     void Start()
@@ -35,6 +34,7 @@ public class GameManager : MonoBehaviour
         Card.OnLeftSwipe += HandleLeftSwipe;
         Card.OnRightSwipe += HandleRightSwipe;
         LoadCard(testCard);
+        ResetCardPosition();
     }
 
     void OnDestroy()
@@ -54,21 +54,21 @@ public class GameManager : MonoBehaviour
     {
         if (cardGameObject.transform.position.x > sideTrigger && Input.GetMouseButtonUp(0))
         {
-            currentCard.ApplyRightEffect();
+            CurrentCard.ApplyRightEffect();
         }
         else if (cardGameObject.transform.position.x < -sideMargin && Input.GetMouseButtonUp(0))
         {
-            currentCard.ApplyLeftEffect();
+            CurrentCard.ApplyLeftEffect();
         }
         else
         {
-            direction = "none";
+            Direction = "none"; 
         }
     }
 
     private void UpdateCardPosition()
     {
-        if (Input.GetMouseButton(0) && mainCardController.isMouseOver)
+        if (Input.GetMouseButton(0) && mainCardController.IsMouseOver)
         {
             Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             cardGameObject.transform.position = pos;
@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
         EnergyStatus = Mathf.Clamp(EnergyStatus + card.energyStatLeft, MinValue, MaxValue);
         ReputationStatus = Mathf.Clamp(ReputationStatus + card.reputationStatLeft, MinValue, MaxValue);
         NewCard();
-        direction = "left";
+        Direction = "left";
     }
 
     private void HandleRightSwipe(Card card)
@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour
         EnergyStatus = Mathf.Clamp(EnergyStatus + card.energyStatRight, MinValue, MaxValue);
         ReputationStatus = Mathf.Clamp(ReputationStatus + card.reputationStatRight, MinValue, MaxValue);
         NewCard();
-        direction = "right";
+        Direction = "right";
     }
 
     public void LoadCard(Card card)
@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
         cardSpriteRenderer.sprite = resourceManager.sprites[(int)card.sprite];
         leftQuote = card.leftQuote;
         rightQuote = card.rightQuote;
-        currentCard = card;
+        CurrentCard = card;
         characterDialogue.text = card.dialogue;
     }
 
@@ -125,5 +125,11 @@ public class GameManager : MonoBehaviour
     {
         int rollDice = Random.Range(0, resourceManager.cards.Length);
         LoadCard(resourceManager.cards[rollDice]);
+        ResetCardPosition();
+    }
+
+    private void ResetCardPosition()
+    {
+        cardGameObject.transform.position = defaultPositionCard;
     }
 }
