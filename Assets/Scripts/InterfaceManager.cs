@@ -1,57 +1,69 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class InterfaceManager : MonoBehaviour
 {
-    // Card
     public GameManager gameManager;
     public GameObject card;
 
-    // UI icons
     public Image moneyStatus;
     public Image energyStatus;
     public Image reputationStatus;
 
-    // UI impact icons
     public Image moneyStatusImpact;
     public Image energyStatusImpact;
     public Image reputationStatusImpact;
 
     void Update()
     {
-        // UI icons
-        moneyStatus.fillAmount = (float) GameManager.moneyStatus / GameManager.maxValue;
-        energyStatus.fillAmount = (float) GameManager.energyStatus / GameManager.maxValue;
-        reputationStatus.fillAmount = (float) GameManager.reputationStatus / GameManager.maxValue;
+        moneyStatus.fillAmount = (float)GameManager.MoneyStatus / GameManager.MaxValue;
+        energyStatus.fillAmount = (float)GameManager.EnergyStatus / GameManager.MaxValue;
+        reputationStatus.fillAmount = (float)GameManager.ReputationStatus / GameManager.MaxValue;
 
-        // UI impact
-        //Right
-        if(gameManager.direction == "right")
+        UpdateImpactIcons();
+    }
+
+    private void UpdateImpactIcons()
+    {
+        if (gameManager == null)
         {
-            if (gameManager.currentCard.moneyStatRight != 0)
-                moneyStatusImpact.transform.localScale = new Vector3(1, 1, 0);
-            if (gameManager.currentCard.energyStatRight != 0)
-                energyStatusImpact.transform.localScale = new Vector3(1, 1, 0);
-            if (gameManager.currentCard.reputationStatRight != 0)
-                reputationStatusImpact.transform.localScale = new Vector3(1, 1, 0);
+            Debug.LogError("GameManager is not assigned in InterfaceManager.");
+            return;
         }
-        //Left
-        else if (gameManager.direction == "left")
+
+        if (gameManager.CurrentCard == null)
         {
-            if (gameManager.currentCard.moneyStatLeft != 0)
-                moneyStatusImpact.transform.localScale = new Vector3(1, 1, 0);
-            if (gameManager.currentCard.energyStatLeft != 0)
-                energyStatusImpact.transform.localScale = new Vector3(1, 1, 0);
-            if (gameManager.currentCard.reputationStatLeft != 0)
-                reputationStatusImpact.transform.localScale = new Vector3(1, 1, 0);
+            Debug.LogError("CurrentCard is null in GameManager.");
+            return;
+        }
+
+        if (gameManager.Direction == "right")
+        {
+            UpdateImpactIcon(moneyStatusImpact, gameManager.CurrentCard.moneyStatRight);
+            UpdateImpactIcon(energyStatusImpact, gameManager.CurrentCard.energyStatRight);
+            UpdateImpactIcon(reputationStatusImpact, gameManager.CurrentCard.reputationStatRight);
+        }
+        else if (gameManager.Direction == "left")
+        {
+            UpdateImpactIcon(moneyStatusImpact, gameManager.CurrentCard.moneyStatLeft);
+            UpdateImpactIcon(energyStatusImpact, gameManager.CurrentCard.energyStatLeft);
+            UpdateImpactIcon(reputationStatusImpact, gameManager.CurrentCard.reputationStatLeft);
         }
         else
         {
-            moneyStatusImpact.transform.localScale = new Vector3(0, 0, 0);
-            energyStatusImpact.transform.localScale = new Vector3(0, 0, 0);
-            reputationStatusImpact.transform.localScale = new Vector3(0, 0, 0);
+            ResetImpactIcons();
         }
+    }
+
+    private void UpdateImpactIcon(Image impactIcon, int statChange)
+    {
+        impactIcon.transform.localScale = statChange != 0 ? new Vector3(1, 1, 0) : Vector3.zero;
+    }
+
+    private void ResetImpactIcons()
+    {
+        moneyStatusImpact.transform.localScale = Vector3.zero;
+        energyStatusImpact.transform.localScale = Vector3.zero;
+        reputationStatusImpact.transform.localScale = Vector3.zero;
     }
 }

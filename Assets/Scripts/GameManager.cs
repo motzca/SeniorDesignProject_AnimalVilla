@@ -1,63 +1,114 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using DialogueEditor;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    // Stat variables
-    public static int moneyStatus = 50;
-    public static int energyStatus = 50;
-    public static int reputationStatus = 50;
-    public static int maxValue = 100;
-    public static int minValue = 0;
+    public static int MoneyStatus { get; private set; } = 50;
+    public static int EnergyStatus { get; private set; } = 50;
+    public static int ReputationStatus { get; private set; } = 50;
+    public static readonly int MaxValue = 100;
+    public static readonly int MinValue = 0;
 
-    //Game objects
     public GameObject cardGameObject;
     public CardController mainCardController;
     public SpriteRenderer cardSpriteRenderer;
     public ResourceManager resourceManager;
     public Vector2 defaultPositionCard;
-    private NPCConversation npcConversation;
 
-    // Tweaking variables
-    public float fMovingSpeed;
-    public float fSideMargin;
-    public float fSideTrigger;
-    Vector3 pos;
-    float alphaText;
+    public float movingSpeed;
+    public float sideMargin;
+    public float sideTrigger;
     public Color textColor;
     public float divideValue;
 
-    // UI
     public TMP_Text characterDialogue;
     public TMP_Text actionQuote;
 
-    // Card variables
-    public string direction;
+    public string Direction { get; private set; }
     private string leftQuote;
     private string rightQuote;
-    public Card currentCard;
+    public Card CurrentCard { get; private set; }
     public Card testCard;
-
-    void StartConversation()
-    {
-        if (ConversationManager.Instance != null)
-        {
-            ConversationManager.Instance.StartConversation(npcConversation);  // Use npcConversation directly
-        }
-    }
 
     void Start()
     {
-        npcConversation = GetComponent<NPCConversation>();
-        StartConversation();
+        Card.OnLeftSwipe += HandleLeftSwipe;
+        Card.OnRightSwipe += HandleRightSwipe;
+        LoadCard(testCard);
+        ResetCardToDefault();
     }
 
-    void UpdateDialogue()
+    void OnDestroy()
     {
+        Card.OnLeftSwipe -= HandleLeftSwipe;
+        Card.OnRightSwipe -= HandleRightSwipe;
+    }
+
+    void Update()
+    {
+        HandleCardInput();
+        UpdateCardPosition();
+        UpdateDialogue();
+    }
+
+    private void HandleCardInput()
+    {
+        if (cardGameObject.transform.position.x > sideTrigger && Input.GetMouseButtonUp(0))
+        {
+            CurrentCard.ApplyRightEffect();
+            Direction = "right";
+            ResetCardToDefault();
+        }
+        else if (cardGameObject.transform.position.x < -sideMargin && Input.GetMouseButtonUp(0))
+        {
+            CurrentCard.ApplyLeftEffect();
+            Direction = "left";
+            ResetCardToDefault();
+        }
+        else
+        {
+            Direction = "none"; 
+        }
+    }
+
+    private void UpdateCardPosition()
+    {
+        if (Input.GetMouseButton(0) && mainCardController.IsMouseOver)
+        {
+            if (!isSwiping)
+            {
+                verticalSwipeDirection = Random.Range(0, 2) * 2 - 1;
+                isSwiping = true;
+            }
+
+            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            float horizontalDistance = mousePosition.x - defaultPositionCard.x;
+
+            float verticalMovement = horizontalDistance * verticalSwipeDirection * 0.8f;
+
+            Vector2 newPosition = new Vector2(mousePosition.x, defaultPositionCard.y + verticalMovement);
+            cardGameObject.transform.position = newPosition;
+
+            float rotationAngle = horizontalDistance * 10.0f; 
+            cardGameObject.transform.rotation = Quaternion.Euler(0, 0, rotationAngle);
+        }
+        else if (isSwiping)
+        {
+            cardGameObject.transform.position = Vector2.MoveTowards(cardGameObject.transform.position, defaultPositionCard, movingSpeed);
+            cardGameObject.transform.rotation = Quaternion.Slerp(cardGameObject.transform.rotation, Quaternion.identity, movingSpeed * Time.deltaTime);
+            isSwiping = false;
+        }
+    }
+
+    private int verticalSwipeDirection = 1;
+    private bool isSwiping = false; 
+
+
+    private void UpdateDialogue()
+    {
+        textColor.a = Mathf.Min((Mathf.Abs(cardGameObject.transform.position.x) - sideMargin) / divideValue, 1);
         actionQuote.color = textColor;
+
         if (cardGameObject.transform.position.x < 0)
         {
             actionQuote.text = leftQuote;
@@ -68,49 +119,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void Update()
+    private void HandleLeftSwipe(Card card)
     {
-        // Stat values logic
+        ApplyCardEffect(card, card.moneyStatLeft, card.energyStatLeft, card.reputationStatLeft);
+        Direction = "left";
+    }
 
+    private void HandleRightSwipe(Card card)
+    {
+        ApplyCardEffect(card, card.moneyStatRight, card.energyStatRight, card.reputationStatRight);
+        Direction = "right";
+    }
 
-        // Dialogue text handling
-        textColor.a = Mathf.Min((Mathf.Abs(cardGameObject.transform.position.x) - fSideMargin)/ divideValue, 1);
-        if (cardGameObject.transform.position.x > fSideTrigger)
-        {
-            if (Input.GetMouseButtonUp(0))
-            {
-              currentCard.Right();
-              NewCard();
-              direction = "right";
-            }
-            
-        } 
-        else if (cardGameObject.transform.position.x > -fSideMargin)
-        {
-            direction = "none";
-            textColor.a = 0;
-        }
-        else
-        {
-            if (Input.GetMouseButtonUp(0))
-            {
-                currentCard.Left();
-                NewCard();
-                direction = "left";
-            }
-        }
-        UpdateDialogue();
-
-        //Movement
-        if (Input.GetMouseButton(0) && mainCardController.isMouseOver)
-        {
-            Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            cardGameObject.transform.position = pos;
-        }
-        else
-        {
-            cardGameObject.transform.position = Vector2.MoveTowards(cardGameObject.transform.position, defaultPositionCard, fMovingSpeed);
-        }
+    private void ApplyCardEffect(Card card, int moneyStat, int energyStat, int reputationStat)
+    {
+        MoneyStatus = Mathf.Clamp(MoneyStatus + moneyStat, MinValue, MaxValue);
+        EnergyStatus = Mathf.Clamp(EnergyStatus + energyStat, MinValue, MaxValue);
+        ReputationStatus = Mathf.Clamp(ReputationStatus + reputationStat, MinValue, MaxValue);
+        NewCard();
     }
 
     public void LoadCard(Card card)
@@ -118,13 +144,20 @@ public class GameManager : MonoBehaviour
         cardSpriteRenderer.sprite = resourceManager.sprites[(int)card.sprite];
         leftQuote = card.leftQuote;
         rightQuote = card.rightQuote;
-        currentCard = card;
+        CurrentCard = card;
         characterDialogue.text = card.dialogue;
     }
 
     public void NewCard()
     {
-        int rollDice = Random.Range(0, resourceManager.cards.Length + 1);
+        int rollDice = Random.Range(0, resourceManager.cards.Length);
         LoadCard(resourceManager.cards[rollDice]);
+        ResetCardToDefault();
+    }
+
+    private void ResetCardToDefault()
+    {
+        cardGameObject.transform.position = defaultPositionCard;
+        cardGameObject.transform.rotation = Quaternion.identity;
     }
 }
