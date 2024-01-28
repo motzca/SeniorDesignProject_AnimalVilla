@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public SpriteRenderer cardSpriteRenderer;
     public ResourceManager resourceManager;
     public Vector2 defaultPositionCard;
+    public DialogueContainer dialogueContainer;
 
     public float movingSpeed;
     public float sideMargin;
@@ -150,8 +151,7 @@ public class GameManager : MonoBehaviour
 
     public void NewCard()
     {
-        int rollDice = Random.Range(0, resourceManager.cards.Length);
-        LoadCard(resourceManager.cards[rollDice]);
+        LoadCard(dialogueContainer.GetNextCard(CurrentCard, Direction));
         ResetCardToDefault();
     }
 
