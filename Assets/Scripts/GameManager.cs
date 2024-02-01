@@ -132,6 +132,14 @@ public class GameManager : MonoBehaviour
         Direction = "right";
     }
 
+
+    public void ResetCardToDefault()
+    {
+        cardGameObject.transform.position = defaultPositionCard;
+        cardGameObject.transform.rotation = Quaternion.identity;
+    }
+
+
     private void ApplyCardEffect(Card card, int moneyStat, int energyStat, int reputationStat)
     {
         MoneyStatus = Mathf.Clamp(MoneyStatus + moneyStat, MinValue, MaxValue);
@@ -140,24 +148,34 @@ public class GameManager : MonoBehaviour
         NewCard();
     }
 
-    public void LoadCard(Card card)
+    public void NewCard(int optionIndex)
     {
-        cardSpriteRenderer.sprite = resourceManager.sprites[(int)card.sprite];
-        leftQuote = card.leftQuote;
-        rightQuote = card.rightQuote;
-        CurrentCard = card;
-        characterDialogue.text = card.dialogue;
+        if (resourceManager.cards != null && resourceManager.cards.Length > 0)
+        {
+            int rollDice = Random.Range(0, resourceManager.cards.Length);
+            LoadCard(resourceManager.cards[rollDice], optionIndex);
+            ResetCardToDefault();
+        }
+        else
+        {
+            Debug.LogError("Resource Manager cards array is null or empty. Please check your setup.");
+        }
     }
 
-    public void NewCard()
+    public void LoadCard(Card card, int optionIndex)
     {
-        LoadCard(dialogueContainer.GetNextCard(CurrentCard, Direction));
-        ResetCardToDefault();
+        if (card != null)
+        {
+            cardSpriteRenderer.sprite = resourceManager.sprites[(int)card.sprite];
+            leftQuote = card.GetOptions()[optionIndex].Quote;
+            rightQuote = card.GetOptions()[optionIndex].Quote;
+            CurrentCard = card;
+            characterDialogue.text = card.GetOptions()[optionIndex].SpeechText;
+        }
+        else
+        {
+            Debug.LogError("Attempting to load a null card. Please check your card data.");
+        }
     }
 
-    private void ResetCardToDefault()
-    {
-        cardGameObject.transform.position = defaultPositionCard;
-        cardGameObject.transform.rotation = Quaternion.identity;
-    }
 }
