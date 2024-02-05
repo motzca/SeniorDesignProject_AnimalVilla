@@ -4,6 +4,8 @@ using UnityEngine;
 public class Card : ScriptableObject
 {
     public CardSprite sprite;
+    public string leftQuote;
+    public string rightQuote;
     public string cardName;
     public string dialogue;
     public int cardId;
@@ -15,8 +17,6 @@ public class Card : ScriptableObject
     public int moneyStatRight;
     public int energyStatRight;
     public int reputationStatRight;
-
-    private DialogueNode dialogueNode;
 
     public delegate void CardSwipeAction(Card card);
     public static event CardSwipeAction OnLeftSwipe;
@@ -32,14 +32,5 @@ public class Card : ScriptableObject
     {
         Debug.Log(cardName + " swiped right");
         OnRightSwipe?.Invoke(this);
-    }
-
-    public void SetDialogueNode(DialogueNode node)
-    {
-        dialogueNode = node;
-    }
-    public DialogueOption[] GetOptions()
-    {
-        return dialogueNode != null ? dialogueNode.Options : null;
     }
 }

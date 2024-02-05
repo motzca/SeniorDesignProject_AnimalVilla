@@ -7,7 +7,7 @@ public class CardController : MonoBehaviour
     private bool isMouseOver;
 
     public bool IsMouseOver => isMouseOver;
-    
+
     private void Start()
     {
         thisCard = GetComponent<BoxCollider2D>();

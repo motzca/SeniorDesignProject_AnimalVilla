@@ -1,3 +1,5 @@
+GameManager.cs
+
 using UnityEngine;
 using TMPro;
 
@@ -14,7 +16,6 @@ public class GameManager : MonoBehaviour
     public SpriteRenderer cardSpriteRenderer;
     public ResourceManager resourceManager;
     public Vector2 defaultPositionCard;
-    public DialogueContainer dialogueContainer;
 
     public float movingSpeed;
     public float sideMargin;
@@ -68,7 +69,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Direction = "none"; 
+            Direction = "none";
         }
     }
 
@@ -90,7 +91,7 @@ public class GameManager : MonoBehaviour
             Vector2 newPosition = new Vector2(mousePosition.x, defaultPositionCard.y + verticalMovement);
             cardGameObject.transform.position = newPosition;
 
-            float rotationAngle = horizontalDistance * 10.0f; 
+            float rotationAngle = horizontalDistance * 10.0f;
             cardGameObject.transform.rotation = Quaternion.Euler(0, 0, rotationAngle);
         }
         else if (isSwiping)
@@ -102,7 +103,7 @@ public class GameManager : MonoBehaviour
     }
 
     private int verticalSwipeDirection = 1;
-    private bool isSwiping = false; 
+    private bool isSwiping = false;
 
 
     private void UpdateDialogue()
@@ -132,14 +133,6 @@ public class GameManager : MonoBehaviour
         Direction = "right";
     }
 
-
-    public void ResetCardToDefault()
-    {
-        cardGameObject.transform.position = defaultPositionCard;
-        cardGameObject.transform.rotation = Quaternion.identity;
-    }
-
-
     private void ApplyCardEffect(Card card, int moneyStat, int energyStat, int reputationStat)
     {
         MoneyStatus = Mathf.Clamp(MoneyStatus + moneyStat, MinValue, MaxValue);
@@ -148,34 +141,25 @@ public class GameManager : MonoBehaviour
         NewCard();
     }
 
-    public void NewCard(int optionIndex)
+    public void LoadCard(Card card)
     {
-        if (resourceManager.cards != null && resourceManager.cards.Length > 0)
-        {
-            int rollDice = Random.Range(0, resourceManager.cards.Length);
-            LoadCard(resourceManager.cards[rollDice], optionIndex);
-            ResetCardToDefault();
-        }
-        else
-        {
-            Debug.LogError("Resource Manager cards array is null or empty. Please check your setup.");
-        }
+        cardSpriteRenderer.sprite = resourceManager.sprites[(int)card.sprite];
+        leftQuote = card.leftQuote;
+        rightQuote = card.rightQuote;
+        CurrentCard = card;
+        characterDialogue.text = card.dialogue;
     }
 
-    public void LoadCard(Card card, int optionIndex)
+    public void NewCard()
     {
-        if (card != null)
-        {
-            cardSpriteRenderer.sprite = resourceManager.sprites[(int)card.sprite];
-            leftQuote = card.GetOptions()[optionIndex].Quote;
-            rightQuote = card.GetOptions()[optionIndex].Quote;
-            CurrentCard = card;
-            characterDialogue.text = card.GetOptions()[optionIndex].SpeechText;
-        }
-        else
-        {
-            Debug.LogError("Attempting to load a null card. Please check your card data.");
-        }
+        int rollDice = Random.Range(0, resourceManager.cards.Length);
+        LoadCard(resourceManager.cards[rollDice]);
+        ResetCardToDefault();
     }
 
+    private void ResetCardToDefault()
+    {
+        cardGameObject.transform.position = defaultPositionCard;
+        cardGameObject.transform.rotation = Quaternion.identity;
+    }
 }
