@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using Fungus;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour
     public SpriteRenderer cardSpriteRenderer;
     public ResourceManager resourceManager;
     public Vector2 defaultPositionCard;
+    public Flowchart flowchart;
 
     public float movingSpeed;
     public float sideMargin;
@@ -123,12 +125,14 @@ public class GameManager : MonoBehaviour
     {
         ApplyCardEffect(card, card.moneyStatLeft, card.energyStatLeft, card.reputationStatLeft);
         Direction = "left";
+        ExecuteFungusBlock(card.leftSwipeBlockName);
     }
 
     private void HandleRightSwipe(Card card)
     {
         ApplyCardEffect(card, card.moneyStatRight, card.energyStatRight, card.reputationStatRight);
         Direction = "right";
+        ExecuteFungusBlock(card.rightSwipeBlockName);
     }
 
     private void ApplyCardEffect(Card card, int moneyStat, int energyStat, int reputationStat)
@@ -154,6 +158,26 @@ public class GameManager : MonoBehaviour
         LoadCard(resourceManager.cards[rollDice]);
         ResetCardToDefault();
     }
+
+    private void ExecuteFungusBlock(string blockName)
+    {
+        if (flowchart != null)
+        {
+            if (!string.IsNullOrEmpty(blockName))
+            {
+                flowchart.ExecuteBlock(blockName);
+            }
+            else
+            {
+                Debug.LogError("Block name is empty or null.");
+            }
+        }
+        else
+        {
+            Debug.LogError("Flowchart reference not set in GameManager.");
+        }
+    }
+}
 
     private void ResetCardToDefault()
     {
