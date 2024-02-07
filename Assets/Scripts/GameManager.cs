@@ -177,7 +177,6 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Flowchart reference not set in GameManager.");
         }
     }
-}
 
     private void ResetCardToDefault()
     {
@@ -185,3 +184,4 @@ public class GameManager : MonoBehaviour
         cardGameObject.transform.rotation = Quaternion.identity;
     }
 }
+
