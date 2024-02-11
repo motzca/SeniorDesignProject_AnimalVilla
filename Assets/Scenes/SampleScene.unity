@@ -297,6 +297,7 @@ Transform:
   m_Children:
   - {fileID: 519420032}
   - {fileID: 1713342222}
+  - {fileID: 997988456}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &252742241
@@ -1283,7 +1284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  scrollPos: {x: 414, y: 81.5}
+  scrollPos: {x: 387, y: 119.5}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
   blockViewHeight: 404
@@ -1673,12 +1674,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 997988440}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.64307815, y: 0.4946531, z: -0.04236237}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 250823759}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1086328162
 GameObject:
@@ -2465,5 +2466,4 @@ SceneRoots:
   - {fileID: 250823759}
   - {fileID: 1741205838}
   - {fileID: 932747106}
-  - {fileID: 997988456}
   - {fileID: 1968839098}

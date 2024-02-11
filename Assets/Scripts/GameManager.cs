@@ -32,11 +32,12 @@ public class GameManager : MonoBehaviour
     public Card CurrentCard { get; private set; }
     public Card testCard;
 
+    private int currentCardIndex = 0;
+    private Card[] storyCards;
+
     void Start()
     {
-        Card.OnLeftSwipe += HandleLeftSwipe;
-        Card.OnRightSwipe += HandleRightSwipe;
-        LoadCard(testCard);
+        LoadNextCard();
         ResetCardToDefault();
     }
 
@@ -121,18 +122,28 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void LoadNextCard()
+    {
+        if (currentCardIndex < storyCards.Length)
+        {
+            LoadCard(storyCards[currentCardIndex]);
+            currentCardIndex++;
+        }
+        else
+        {
+            Debug.Log("End of story reached.");
+            // Here we'll handle end of story, e.g., display ending screen
+        }
+    }
+
     private void HandleLeftSwipe(Card card)
     {
-        ApplyCardEffect(card, card.moneyStatLeft, card.energyStatLeft, card.reputationStatLeft);
-        Direction = "left";
-        ExecuteFungusBlock(card.leftSwipeBlockName);
+        LoadNextCard();
     }
 
     private void HandleRightSwipe(Card card)
     {
-        ApplyCardEffect(card, card.moneyStatRight, card.energyStatRight, card.reputationStatRight);
-        Direction = "right";
-        ExecuteFungusBlock(card.rightSwipeBlockName);
+        LoadNextCard();
     }
 
     private void ApplyCardEffect(Card card, int moneyStat, int energyStat, int reputationStat)
