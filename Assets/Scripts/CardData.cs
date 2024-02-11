@@ -4,7 +4,7 @@ using UnityEngine;
 public class CardData : ScriptableObject
 {
     public string cardName;
-    public string dialogue;
+    public string fungusBlockName;
     // Add other properties as needed
 }
 

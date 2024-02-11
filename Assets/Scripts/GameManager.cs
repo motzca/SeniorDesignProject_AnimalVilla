@@ -73,6 +73,48 @@ public class GameManager : MonoBehaviour
             Direction = "none"; 
         }
     }
+    public void LoadCard(Card card)
+    {
+        cardSpriteRenderer.sprite = cardData.sprite;
+        if (flowchart != null)
+        {
+            var block = flowchart.FindBlock(cardData.fungusBlockName);
+            if (block != null)
+            {
+                var dialogueText = block.GetComponentsInChildren<TextMeshProUGUI>()[0];
+                characterDialogue.text = dialogueText.text;
+            }
+            else
+            {
+                Debug.LogWarning("Fungus block not found for card: " + cardData.cardName);
+            }
+        }
+        else
+        {
+            Debug.LogError("Flowchart reference not set in GameManager.");
+        }
+    }
+
+    public void NewCard()
+    {
+        int rollDice = Random.Range(0, resourceManager.cards.Length);
+        LoadCard(resourceManager.cards[rollDice]);
+        ResetCardToDefault();
+    }
+
+    private void LoadNextCard()
+    {
+        if (currentCardIndex < storyCards.Length)
+        {
+            LoadCard(storyCards[currentCardIndex]);
+            currentCardIndex++;
+        }
+        else
+        {
+            Debug.Log("End of story reached.");
+            // Handle end of story, e.g., display ending screen
+        }
+    }
 
     private void UpdateCardPosition()
     {
@@ -154,21 +196,6 @@ public class GameManager : MonoBehaviour
         NewCard();
     }
 
-    public void LoadCard(Card card)
-    {
-        cardSpriteRenderer.sprite = resourceManager.sprites[(int)card.sprite];
-        leftQuote = card.leftQuote;
-        rightQuote = card.rightQuote;
-        CurrentCard = card;
-        characterDialogue.text = card.dialogue;
-    }
-
-    public void NewCard()
-    {
-        int rollDice = Random.Range(0, resourceManager.cards.Length);
-        LoadCard(resourceManager.cards[rollDice]);
-        ResetCardToDefault();
-    }
 
     private void ExecuteFungusBlock(string blockName)
     {
