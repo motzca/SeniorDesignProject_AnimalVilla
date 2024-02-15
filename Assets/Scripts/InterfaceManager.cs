@@ -24,36 +24,45 @@ public class InterfaceManager : MonoBehaviour
     }
 
     private void UpdateImpactIcons()
+{
+    if (gameManager == null)
     {
-        if (gameManager == null)
-        {
-            Debug.LogError("GameManager is not assigned in InterfaceManager.");
-            return;
-        }
-
-        if (gameManager.CurrentCard == null)
-        {
-            Debug.LogError("CurrentCard is null in GameManager.");
-            return;
-        }
-
-        if (gameManager.Direction == "right")
-        {
-            UpdateImpactIcon(moneyStatusImpact, gameManager.CurrentCard.moneyStatRight);
-            UpdateImpactIcon(energyStatusImpact, gameManager.CurrentCard.energyStatRight);
-            UpdateImpactIcon(reputationStatusImpact, gameManager.CurrentCard.reputationStatRight);
-        }
-        else if (gameManager.Direction == "left")
-        {
-            UpdateImpactIcon(moneyStatusImpact, gameManager.CurrentCard.moneyStatLeft);
-            UpdateImpactIcon(energyStatusImpact, gameManager.CurrentCard.energyStatLeft);
-            UpdateImpactIcon(reputationStatusImpact, gameManager.CurrentCard.reputationStatLeft);
-        }
-        else
-        {
-            ResetImpactIcons();
-        }
+        Debug.LogError("GameManager is not assigned in InterfaceManager.");
+        return;
     }
+
+    if (gameManager.CurrentCard == null)
+    {
+        Debug.LogError("CurrentCard is null in GameManager.");
+        return;
+    }
+
+    CardData currentCardData = gameManager.FindCardDataByID(gameManager.CurrentCard.cardId);
+
+    if (currentCardData == null)
+    {
+        Debug.LogError("Card data not found for card ID: " + gameManager.CurrentCard.cardId);
+        return;
+    }
+
+    if (gameManager.Direction == "right")
+    {
+        UpdateImpactIcon(moneyStatusImpact, currentCardData.moneyStatRight);
+        UpdateImpactIcon(energyStatusImpact, currentCardData.energyStatRight);
+        UpdateImpactIcon(reputationStatusImpact, currentCardData.reputationStatRight);
+    }
+    else if (gameManager.Direction == "left")
+    {
+        UpdateImpactIcon(moneyStatusImpact, currentCardData.moneyStatLeft);
+        UpdateImpactIcon(energyStatusImpact, currentCardData.energyStatLeft);
+        UpdateImpactIcon(reputationStatusImpact, currentCardData.reputationStatLeft);
+    }
+    else
+    {
+        ResetImpactIcons();
+    }
+}
+
 
     private void UpdateImpactIcon(Image impactIcon, int statChange)
     {

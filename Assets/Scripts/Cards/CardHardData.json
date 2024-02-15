@@ -1,0 +1,33 @@
+{
+    "cards": [
+      {
+        "cardId": 1,
+        "dialogue": "This is the dialogue for card 1.",
+        "leftQuote": "Left quote for card 1.",
+        "rightQuote": "Right quote for card 1.",
+        "moneyStatLeft": 0,
+        "energyStatLeft": 0,
+        "reputationStatLeft": 0,
+        "moneyStatRight": 0,
+        "energyStatRight": 0,
+        "reputationStatRight": 0,
+        "nextCardLeft": 2,
+        "nextCardRight": 2
+      },
+      {
+        "cardId": 2,
+        "dialogue": "This is the dialogue for card 2.",
+        "leftQuote": "Left quote for card 2.",
+        "rightQuote": "Right quote for card 2.",
+        "moneyStatLeft": 0,
+        "energyStatLeft": 0,
+        "reputationStatLeft": 0,
+        "moneyStatRight": 0,
+        "energyStatRight": 0,
+        "reputationStatRight": 0,
+        "nextCardLeft": 4,
+        "nextCardRight": 5
+      }
+    ]
+  }
+  

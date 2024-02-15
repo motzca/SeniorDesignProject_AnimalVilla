@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 using TMPro;
 
 public class GameManager : MonoBehaviour
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour
     public SpriteRenderer cardSpriteRenderer;
     public ResourceManager resourceManager;
     public Vector2 defaultPositionCard;
+    public List<CardData> cardDataList;
 
     public float movingSpeed;
     public float sideMargin;
@@ -119,45 +121,146 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void HandleLeftSwipe(Card card)
+private void HandleLeftSwipe(Card card)
+{
+    CardData cardData = FindCardDataByID(card.cardId);
+    if (cardData != null)
     {
-        ApplyCardEffect(card, card.moneyStatLeft, card.energyStatLeft, card.reputationStatLeft);
+        ApplyCardEffect(cardData);
         Direction = "left";
     }
-
-    private void HandleRightSwipe(Card card)
+    else
     {
-        ApplyCardEffect(card, card.moneyStatRight, card.energyStatRight, card.reputationStatRight);
+        Debug.LogError("Card data not found for card ID: " + card.cardId);
+    }
+}
+
+private void HandleRightSwipe(Card card)
+{
+    CardData cardData = FindCardDataByID(card.cardId);
+    if (cardData != null)
+    {
+        ApplyCardEffect(cardData);
         Direction = "right";
     }
-
-    private void ApplyCardEffect(Card card, int moneyStat, int energyStat, int reputationStat)
+    else
     {
-        MoneyStatus = Mathf.Clamp(MoneyStatus + moneyStat, MinValue, MaxValue);
-        EnergyStatus = Mathf.Clamp(EnergyStatus + energyStat, MinValue, MaxValue);
-        ReputationStatus = Mathf.Clamp(ReputationStatus + reputationStat, MinValue, MaxValue);
-        NewCard();
+        Debug.LogError("Card data not found for card ID: " + card.cardId);
+    }
+}
+
+
+private void ApplyCardEffect(CardData cardData)
+{
+    MoneyStatus = Mathf.Clamp(MoneyStatus + cardData.moneyStatLeft, MinValue, MaxValue);
+    EnergyStatus = Mathf.Clamp(EnergyStatus + cardData.energyStatLeft, MinValue, MaxValue);
+    ReputationStatus = Mathf.Clamp(ReputationStatus + cardData.reputationStatLeft, MinValue, MaxValue);
+    NewCard();
+}
+
+ public void LoadCard(Card card)
+    {
+        CardData cardData = FindCardDataByID(card.cardId);
+
+        if (cardData != null)
+        {
+            // Update the card sprite renderer
+            cardSpriteRenderer.sprite = resourceManager.sprites[cardData.spriteIndex];
+
+            // Update other card properties
+            leftQuote = cardData.leftQuote;
+            rightQuote = cardData.rightQuote;
+            CurrentCard = card;
+            characterDialogue.text = cardData.dialogue;
+        }
+        else
+        {
+            Debug.LogError("Card data not found for card ID: " + card.cardId);
+        }
     }
 
-    public void LoadCard(Card card)
+    public CardData FindCardDataByID(int cardID)
     {
-        cardSpriteRenderer.sprite = resourceManager.sprites[(int)card.sprite];
-        leftQuote = card.leftQuote;
-        rightQuote = card.rightQuote;
-        CurrentCard = card;
-        characterDialogue.text = card.dialogue;
+        foreach (CardData data in resourceManager.cardData)
+        {
+            if (data.cardId == cardID)
+            {
+                return data;
+            }
+        }
+        return null;
     }
 
     public void NewCard()
     {
-        int rollDice = Random.Range(0, resourceManager.cards.Length);
-        LoadCard(resourceManager.cards[rollDice]);
-        ResetCardToDefault();
+        if (CurrentCard != null)
+        {
+            CardData nextCardData = null;
+
+            // Determine the next card data based on the swipe direction
+            if (Direction == "right")
+            {
+                nextCardData = FindCardDataByID(CurrentCard.cardId); // Change this line to fit your specific logic
+            }
+            else if (Direction == "left")
+            {
+                nextCardData = FindCardDataByID(CurrentCard.cardId); // Change this line to fit your specific logic
+            }
+
+            // Load the next card if found
+            if (nextCardData != null)
+            {
+                // Create a new card object and load it
+                Card nextCard = ScriptableObject.CreateInstance<Card>();
+                nextCard.cardId = nextCardData.cardId; // Set the ID of the next card
+                LoadCard(nextCard);
+                ResetCardToDefault();
+            }
+            else
+            {
+                Debug.LogError("Next card data not found for current card ID: " + CurrentCard.cardId);
+            }
+        }
+        else
+        {
+            Debug.LogError("Current card is null.");
+        }
     }
 
+    public void LoadCardData()
+    {
+        string filePath = Application.streamingAssetsPath + "/Cards/CardHardData.json";
+
+        if (System.IO.File.Exists(filePath))
+        {
+            string dataAsJson = System.IO.File.ReadAllText(filePath);
+            cardDataList = JsonUtility.FromJson<List<CardData>>(dataAsJson);
+        }
+        else
+        {
+            Debug.LogError("Cannot find card data JSON file at path: " + filePath);
+        }
+    }
     private void ResetCardToDefault()
     {
         cardGameObject.transform.position = defaultPositionCard;
         cardGameObject.transform.rotation = Quaternion.identity;
+    }
+
+    public Card CreateCard(int cardId)
+    {
+        CardData cardData = cardDataList.Find(x => x.cardId == cardId);
+        if (cardData != null)
+        {
+            Card newCard = ScriptableObject.CreateInstance<Card>();
+            newCard.cardId = cardData.cardId;
+            // Set any other properties of the Card instance here if needed
+            return newCard;
+        }
+        else
+        {
+            Debug.LogError("Card data not found for ID: " + cardId);
+            return null;
+        }
     }
 }
