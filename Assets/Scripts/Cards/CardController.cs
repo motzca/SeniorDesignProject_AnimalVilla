@@ -1,15 +1,20 @@
 using UnityEngine;
+using System.Collections;
+
 
 public class CardController : MonoBehaviour
 {
     public Card card;
     private BoxCollider2D thisCard;
     private bool isDragging;
-    private Vector3 dragStartPosition;
+    private Vector3 dragStartPosition; 
+    private Vector3 lastPosition;
+    private CardGravity cardGravity;
 
     private void Start()
     {
         thisCard = GetComponent<BoxCollider2D>();
+        cardGravity = GetComponent<CardGravity>();
     }
 
     private void Update()
@@ -31,18 +36,21 @@ public class CardController : MonoBehaviour
                     if (thisCard.OverlapPoint(touchPos))
                     {
                         isDragging = true;
+                        dragStartPosition = transform.position;
                     }
                     break;
                 case TouchPhase.Moved:
                     if (isDragging)
                     {
                         transform.position = new Vector3(touchPos.x, touchPos.y, transform.position.z);
+                        lastPosition = transform.position;
                     }
                     break;
                 case TouchPhase.Ended:
                     if (isDragging)
                     {
                         isDragging = false;
+                        ProcessSwipeEnd();
                     }
                     break;
             }
@@ -58,32 +66,54 @@ public class CardController : MonoBehaviour
             if (thisCard.OverlapPoint(mousePos))
             {
                 isDragging = true;
-                dragStartPosition = transform.position; // Record start position for swipe detection
+                dragStartPosition = transform.position; 
             }
         }
 
         if (Input.GetMouseButton(0) && isDragging)
         {
             transform.position = new Vector3(mousePos.x, mousePos.y, transform.position.z);
+            lastPosition = transform.position;
         }
 
         if (Input.GetMouseButtonUp(0) && isDragging)
         {
             isDragging = false;
-            Vector3 dragEndPosition = transform.position; // Current position as the drag ends
-            Vector3 swipeDirection = dragEndPosition - dragStartPosition;
-            float horizontalDistance = Mathf.Abs(swipeDirection.x);
-            float verticalDistance = Mathf.Abs(swipeDirection.y);
-
-            if (horizontalDistance > verticalDistance && horizontalDistance > 0.5f) // Adjust 0.5f threshold as needed
-            {
-                bool swipedRight = swipeDirection.x > 0;
-                Debug.Log(swipedRight ? "Swiped Right" : "Swiped Left");
-            }
-            else
-            {
-                Debug.Log("Swipe was unclear or too short.");
-            }
+            ProcessSwipeEnd(); 
         }
+    }
+
+    private void ProcessSwipeEnd()
+    {
+        Vector3 swipeDirection = lastPosition - dragStartPosition;
+        float horizontalDistance = Mathf.Abs(swipeDirection.x);
+        float verticalDistance = Mathf.Abs(swipeDirection.y);
+
+        if (horizontalDistance > verticalDistance && horizontalDistance > 1.0f) 
+        {
+            bool swipedRight = swipeDirection.x > 0;
+            GameManager.Instance.ProcessSwipeResult(swipedRight, true);
+        }
+        else
+        {
+            Debug.Log("Swipe was unclear or not horizontal enough. No card change.");
+            GameManager.Instance.ProcessSwipeResult(false, false);
+        }
+    }
+
+    private IEnumerator AnimateCardToPosition(Vector3 targetPosition)
+    {
+        float elapsedTime = 0;
+        float totalTime = 0.5f;
+        Vector3 startPosition = transform.position;
+
+        while (elapsedTime < totalTime)
+        {
+            transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / totalTime);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = targetPosition;
     }
 }

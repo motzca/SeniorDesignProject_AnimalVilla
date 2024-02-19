@@ -97,7 +97,7 @@ public class CardGravity : MonoBehaviour
     }
 
 
-    private void ApplyCardEffect(bool swipedRight)
+    public void ApplyCardEffect(bool swipedRight)
     {
         Debug.Log(swipedRight ? "Swiped Right" : "Swiped Left");
     }

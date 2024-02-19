@@ -84,18 +84,22 @@ public class GameManager : MonoBehaviour
 
     private void ProcessCardSwipe(bool swipedRight)
     {
-        if (swipedRight)
+        Direction = swipedRight ? "right" : "left";
+        ApplyCardEffect(CurrentCard, swipedRight);
+    }
+
+    public void ProcessSwipeResult(bool swipedRight, bool isSwipeClear)
+    {
+        if (isSwipeClear)
         {
-            ApplyCardEffect(CurrentCard, true);
-            Direction = "right";
+            ApplyCardEffect(CurrentCard, swipedRight); 
+            NewCard();
         }
         else
         {
-            ApplyCardEffect(CurrentCard, false);
-            Direction = "left";
+            Debug.Log("Retaining current card due to unclear swipe.");
+            ResetCardToDefault();
         }
-        ResetCardToDefault();
-        NewCard();
     }
 
     private void ApplyCardEffect(Card card, bool swipedRight)
