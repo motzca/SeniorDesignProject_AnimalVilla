@@ -5,6 +5,5 @@ public class CardData : ScriptableObject
 {
     public string cardName;
     public string fungusBlockName;
-    // Add other properties as needed
 }
 

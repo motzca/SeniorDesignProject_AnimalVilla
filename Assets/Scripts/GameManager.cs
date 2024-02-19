@@ -1,6 +1,5 @@
 using UnityEngine;
 using TMPro;
-using Fungus;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,7 +14,6 @@ public class GameManager : MonoBehaviour
     public SpriteRenderer cardSpriteRenderer;
     public ResourceManager resourceManager;
     public Vector2 defaultPositionCard;
-    public Flowchart flowchart;
 
     public float movingSpeed;
     public float sideMargin;
@@ -32,12 +30,11 @@ public class GameManager : MonoBehaviour
     public Card CurrentCard { get; private set; }
     public Card testCard;
 
-    private int currentCardIndex = 0;
-    private Card[] storyCards;
-
     void Start()
     {
-        LoadNextCard();
+        Card.OnLeftSwipe += HandleLeftSwipe;
+        Card.OnRightSwipe += HandleRightSwipe;
+        LoadCard(testCard);
         ResetCardToDefault();
     }
 
@@ -71,48 +68,6 @@ public class GameManager : MonoBehaviour
         else
         {
             Direction = "none"; 
-        }
-    }
-    public void LoadCard(Card card)
-    {
-        cardSpriteRenderer.sprite = cardData.sprite;
-        if (flowchart != null)
-        {
-            var block = flowchart.FindBlock(cardData.fungusBlockName);
-            if (block != null)
-            {
-                var dialogueText = block.GetComponentsInChildren<TextMeshProUGUI>()[0];
-                characterDialogue.text = dialogueText.text;
-            }
-            else
-            {
-                Debug.LogWarning("Fungus block not found for card: " + cardData.cardName);
-            }
-        }
-        else
-        {
-            Debug.LogError("Flowchart reference not set in GameManager.");
-        }
-    }
-
-    public void NewCard()
-    {
-        int rollDice = Random.Range(0, resourceManager.cards.Length);
-        LoadCard(resourceManager.cards[rollDice]);
-        ResetCardToDefault();
-    }
-
-    private void LoadNextCard()
-    {
-        if (currentCardIndex < storyCards.Length)
-        {
-            LoadCard(storyCards[currentCardIndex]);
-            currentCardIndex++;
-        }
-        else
-        {
-            Debug.Log("End of story reached.");
-            // Handle end of story, e.g., display ending screen
         }
     }
 
@@ -164,28 +119,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void LoadNextCard()
-    {
-        if (currentCardIndex < storyCards.Length)
-        {
-            LoadCard(storyCards[currentCardIndex]);
-            currentCardIndex++;
-        }
-        else
-        {
-            Debug.Log("End of story reached.");
-            // Here we'll handle end of story, e.g., display ending screen
-        }
-    }
-
     private void HandleLeftSwipe(Card card)
     {
-        LoadNextCard();
+        ApplyCardEffect(card, card.moneyStatLeft, card.energyStatLeft, card.reputationStatLeft);
+        Direction = "left";
     }
 
     private void HandleRightSwipe(Card card)
     {
-        LoadNextCard();
+        ApplyCardEffect(card, card.moneyStatRight, card.energyStatRight, card.reputationStatRight);
+        Direction = "right";
     }
 
     private void ApplyCardEffect(Card card, int moneyStat, int energyStat, int reputationStat)
@@ -196,24 +139,20 @@ public class GameManager : MonoBehaviour
         NewCard();
     }
 
-
-    private void ExecuteFungusBlock(string blockName)
+    public void LoadCard(Card card)
     {
-        if (flowchart != null)
-        {
-            if (!string.IsNullOrEmpty(blockName))
-            {
-                flowchart.ExecuteBlock(blockName);
-            }
-            else
-            {
-                Debug.LogError("Block name is empty or null.");
-            }
-        }
-        else
-        {
-            Debug.LogError("Flowchart reference not set in GameManager.");
-        }
+        cardSpriteRenderer.sprite = resourceManager.sprites[(int)card.sprite];
+        leftQuote = card.leftQuote;
+        rightQuote = card.rightQuote;
+        CurrentCard = card;
+        characterDialogue.text = card.dialogue;
+    }
+
+    public void NewCard()
+    {
+        int rollDice = Random.Range(0, resourceManager.cards.Length);
+        LoadCard(resourceManager.cards[rollDice]);
+        ResetCardToDefault();
     }
 
     private void ResetCardToDefault()
@@ -222,4 +161,3 @@ public class GameManager : MonoBehaviour
         cardGameObject.transform.rotation = Quaternion.identity;
     }
 }
-
