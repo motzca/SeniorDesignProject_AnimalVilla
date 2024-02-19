@@ -7,11 +7,10 @@ public class DeckManager : MonoBehaviour
 
     public void ApplyChoiceEffects(ChangedIndicatorsInfo choiceEffects)
     {
-        // Apply the effects from the choice
+        // Apply the effects for the players choice
         foreach (var effect in choiceEffects.IndicatorChanges)
         {
-            // Implement logic to modify the game state based on the effect
-            // This should be increasing/decreasing health, wealth, happiness.
+            // Add logic to modify the games health, wealth, happiness, etc.
         }
     }
 
