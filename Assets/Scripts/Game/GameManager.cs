@@ -44,15 +44,45 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        LoadCard(testCard);
-        ResetCardToDefault();
-    }
+void Start()
+{
+    // Assuming the card should start at the origin or a specific position
+    defaultPositionCard = new Vector2(0, cardGameObject.transform.position.y);
+    cardGameObject.transform.position = defaultPositionCard;
+    LoadCard(testCard);
+    ResetCardToDefault(); // This now also sets actionQuote correctly
+    Debug.Log($"Start: Card X position set to {cardGameObject.transform.position.x}");
+}
+
 
     void Update()
     {
         HandleCardInput();
+        UpdateDialogue();
+    }
+
+    private void UpdateDialogue()
+    {
+        float positionVariance = 1.0f;
+
+        if (Mathf.Abs(cardGameObject.transform.position.x - defaultPositionCard.x) <= positionVariance)
+        {
+            actionQuote.text = "Swipe left or right";
+        }
+        else
+        {
+            textColor.a = Mathf.Min((Mathf.Abs(cardGameObject.transform.position.x) - sideMargin) / divideValue, 1);
+            actionQuote.color = textColor;
+
+            if (cardGameObject.transform.position.x < 0)
+            {
+                actionQuote.text = leftQuote; 
+            }
+            else
+            {
+                actionQuote.text = rightQuote;
+            }
+        }
     }
 
     public void UpdateMoney(int change)
@@ -120,6 +150,7 @@ public class GameManager : MonoBehaviour
         rightQuote = card.rightQuote;
         CurrentCard = card;
         characterDialogue.text = card.dialogue;
+        actionQuote.text = "Swipe left or right";
     }
 
     private void NewCard()
@@ -130,7 +161,8 @@ public class GameManager : MonoBehaviour
 
     private void ResetCardToDefault()
     {
-        cardGameObject.transform.position = defaultPositionCard;
+        cardGameObject.transform.position = new Vector2(0, cardGameObject.transform.position.y);
         cardGameObject.transform.rotation = Quaternion.identity;
+        actionQuote.text = "Swipe left or right";
     }
 }
