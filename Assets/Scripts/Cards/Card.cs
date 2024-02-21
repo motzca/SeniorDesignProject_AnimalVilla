@@ -17,20 +17,4 @@ public class Card : ScriptableObject
     public int moneyStatRight;
     public int energyStatRight;
     public int reputationStatRight;
-
-    public delegate void CardSwipeAction(Card card);
-    public static event CardSwipeAction OnLeftSwipe;
-    public static event CardSwipeAction OnRightSwipe;
-
-    public void ApplyLeftEffect()
-    {
-        Debug.Log(cardName + " swiped left");
-        OnLeftSwipe?.Invoke(this);
-    }
-
-    public void ApplyRightEffect()
-    {
-        Debug.Log(cardName + " swiped right");
-        OnRightSwipe?.Invoke(this);
-    }
 }
