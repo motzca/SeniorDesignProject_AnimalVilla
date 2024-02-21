@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using Fungus;
 
 public class GameManager : MonoBehaviour
 {
@@ -30,6 +31,7 @@ public class GameManager : MonoBehaviour
     private string leftQuote;
     private string rightQuote;
     public Card CurrentCard { get; private set; }
+    public Flowchart flowchart;
     public Card testCard;
 
     private void Awake()
@@ -73,6 +75,7 @@ void Start()
         {
             textColor.a = Mathf.Min((Mathf.Abs(cardGameObject.transform.position.x) - sideMargin) / divideValue, 1);
             actionQuote.color = textColor;
+            actionQuote.text = flowchart.GetStringVariable("CharacterDialogue");
 
             if (cardGameObject.transform.position.x < 0)
             {
@@ -151,6 +154,9 @@ void Start()
         CurrentCard = card;
         characterDialogue.text = card.dialogue;
         actionQuote.text = "Swipe left or right";
+        flowchart.SetStringVariable("CharacterDialogue", card.dialogue);
+        flowchart.SetStringVariable("LeftQuote", card.leftQuote);
+        flowchart.SetStringVariable("RightQuote", card.rightQuote);
     }
 
     private void NewCard()
