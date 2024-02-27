@@ -165,4 +165,14 @@ void Start()
         cardGameObject.transform.rotation = Quaternion.identity;
         actionQuote.text = "Swipe left or right";
     }
+
+    public void SaveGame()
+    {
+        SaveLoadManager.SaveGame(this);
+    }
+
+    public void LoadGame()
+    {
+        SaveLoadManager.LoadGame(this);
+    }
 }
