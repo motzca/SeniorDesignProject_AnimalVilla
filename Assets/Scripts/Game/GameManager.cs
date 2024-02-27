@@ -5,9 +5,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    public static int MoneyStatus { get; private set; } = 50;
-    public static int EnergyStatus { get; private set; } = 50;
-    public static int ReputationStatus { get; private set; } = 50;
+    public static int MoneyStatus { get; set; } = 50;
+    public static int EnergyStatus { get; set; } = 50;
+    public static int ReputationStatus { get; set; } = 50;
     public static readonly int MaxValue = 100;
     public static readonly int MinValue = 0;
 
@@ -167,12 +167,7 @@ void Start()
     }
 
     public void SaveGame()
-    {
-        SaveLoadManager.SaveGame(this);
-    }
-
-    public void LoadGame()
-    {
-        SaveLoadManager.LoadGame(this);
-    }
+{
+    SaveLoadManager.SaveGame(this);
+}
 }
