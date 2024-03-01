@@ -10,12 +10,16 @@ public class GameManager : MonoBehaviour
     public static int ReputationStatus { get; private set; } = 50;
     public static readonly int MaxValue = 100;
     public static readonly int MinValue = 0;
+    public int endingMoney = 0;
+    public int endingEnergy= 0;
+    public int endingReputation = 0;
 
     public GameObject cardGameObject;
     public CardController mainCardController;
     public SpriteRenderer cardSpriteRenderer;
     public ResourceManager resourceManager;
     public Vector2 defaultPositionCard;
+    private EndingManager endingManager;
 
     public float movingSpeed;
     public float sideMargin;
@@ -46,11 +50,10 @@ public class GameManager : MonoBehaviour
 
 void Start()
 {
-    // Assuming the card should start at the origin or a specific position
     defaultPositionCard = new Vector2(0, cardGameObject.transform.position.y);
     cardGameObject.transform.position = defaultPositionCard;
     LoadCard(testCard);
-    ResetCardToDefault(); // This now also sets actionQuote correctly
+    ResetCardToDefault();
     Debug.Log($"Start: Card X position set to {cardGameObject.transform.position.x}");
 }
 
@@ -59,6 +62,8 @@ void Start()
     {
         HandleCardInput();
         UpdateDialogue();
+
+        endingManager.CheckForStatEndings(MoneyStatus, EnergyStatus, ReputationStatus, endingMoney, endingEnergy, endingReputation);
     }
 
     private void UpdateDialogue()
@@ -164,5 +169,9 @@ void Start()
         cardGameObject.transform.position = new Vector2(0, cardGameObject.transform.position.y);
         cardGameObject.transform.rotation = Quaternion.identity;
         actionQuote.text = "Swipe left or right";
+    }
+
+    public void LoadStatEndingCard (string endingCardName) {
+        // Logic meant to go here for loading the specific stat ending card by name
     }
 }

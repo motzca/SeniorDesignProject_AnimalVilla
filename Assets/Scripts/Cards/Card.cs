@@ -17,4 +17,8 @@ public class Card : ScriptableObject
     public int moneyStatRight;
     public int energyStatRight;
     public int reputationStatRight;
+
+    public int endingMoney { get; set; }
+    public int endingEnergy { get; set; }
+    public int endingReputation { get; set; }
 }
