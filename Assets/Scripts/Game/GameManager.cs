@@ -171,7 +171,12 @@ void Start()
         actionQuote.text = "Swipe left or right";
     }
 
-    public void LoadStatEndingCard (string endingCardName) {
-        // Logic meant to go here for loading the specific stat ending card by name
+    public void LoadStatEndingCard (int cardId) {
+        foreach (var card in resourceManager.cards) {
+            if (card.cardId == cardId){
+                LoadCard(card);
+                break;
+            }
+        }
     }
 }
