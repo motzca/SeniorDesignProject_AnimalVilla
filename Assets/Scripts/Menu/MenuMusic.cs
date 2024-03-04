@@ -27,7 +27,7 @@ public class MenuMusic : MonoBehaviour
 
     private void LoadAndApplySavedVolumeSettings()
     {
-        float musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0.5f); // Default value if not set
+        float musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0.5f);
         AdjustVolume(musicVolume);
     }
 
@@ -52,7 +52,7 @@ public class MenuMusic : MonoBehaviour
             isMusicActive = true;
         }
     }
-    
+
     public void ToggleActiveState()
     {
         isMusicActive = !isMusicActive;
