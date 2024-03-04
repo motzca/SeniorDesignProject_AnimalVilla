@@ -10,12 +10,22 @@ public class OptionsMenu : MonoBehaviour
     [SerializeField] private Slider hapticsSlider;
     [SerializeField] private GameObject startMenu;
     [SerializeField] private GameObject optionsMenu;
+    [SerializeField] private MenuMusic menuMusic;
+
     private float initialSoundEffectsVolume;
     private float initialMusicVolume;
     private float initialHapticsIntensity;
 
     void Start()
     {
+        if (menuMusic == null)
+        {
+            menuMusic = FindObjectOfType<MenuMusic>();
+        }
+
+        soundEffectsVolumeSlider.onValueChanged.AddListener(HandleSoundEffectsVolumeChanged);
+        musicVolumeSlider.onValueChanged.AddListener(HandleMusicVolumeChanged);
+
         saveButton.onClick.AddListener(() => {
             SaveSettings();
             SwitchToStartMenu();
@@ -29,9 +39,9 @@ public class OptionsMenu : MonoBehaviour
 
     void LoadCurrentSettings()
     {
-        initialSoundEffectsVolume = soundEffectsVolumeSlider.value = PlayerPrefs.GetFloat("SoundEffectsVolume", 100);
-        initialMusicVolume = musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume", 100);
-        initialHapticsIntensity = hapticsSlider.value = PlayerPrefs.GetFloat("HapticsIntensity", 100);
+        initialSoundEffectsVolume = soundEffectsVolumeSlider.value = PlayerPrefs.GetFloat("SoundEffectsVolume", 0.5f);
+        initialMusicVolume = musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume", 0.5f);
+        initialHapticsIntensity = hapticsSlider.value = PlayerPrefs.GetFloat("HapticsIntensity", 0.5f);
     }
 
     void SaveSettings()
@@ -43,6 +53,7 @@ public class OptionsMenu : MonoBehaviour
         initialSoundEffectsVolume = soundEffectsVolumeSlider.value;
         initialMusicVolume = musicVolumeSlider.value;
         initialHapticsIntensity = hapticsSlider.value;
+        HandleMusicVolumeChanged(musicVolumeSlider.value);
     }
 
     void CancelChanges()
@@ -56,5 +67,18 @@ public class OptionsMenu : MonoBehaviour
     {
         optionsMenu.SetActive(false);
         startMenu.SetActive(true);
+    }
+
+    void HandleMusicVolumeChanged(float volume)
+    {
+        if (menuMusic != null)
+        {
+            menuMusic.AdjustVolume(volume);
+        }
+    }
+
+    void HandleSoundEffectsVolumeChanged(float volume)
+    {
+        // Sound effects volume placeholder
     }
 }

@@ -12,14 +12,14 @@ public class MenuMusic : MonoBehaviour
         GameObject[] musicObj = GameObject.FindGameObjectsWithTag("GameMusic");
         if (musicObj.Length > 1)
         {
-            Destroy(gameObject); 
+            Destroy(gameObject);
         }
         else
         {
-            DontDestroyOnLoad(gameObject); // Keeps music playing across scenes
+            DontDestroyOnLoad(gameObject);
         }
 
-        SceneManager.sceneLoaded += OnSceneLoaded; 
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDestroy()
@@ -43,7 +43,11 @@ public class MenuMusic : MonoBehaviour
 
     public void AdjustVolume(float volume)
     {
-        GetComponent<AudioSource>().volume = volume / 100f; // Assuming volume is a 0-100 value
+        AudioSource audioSource = GetComponent<AudioSource>();
+        if (audioSource != null)
+        {
+            audioSource.volume = volume;
+        }
     }
 
     public void ToggleActiveState()
