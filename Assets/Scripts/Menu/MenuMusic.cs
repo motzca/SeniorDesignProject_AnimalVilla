@@ -6,6 +6,7 @@ public class MenuMusic : MonoBehaviour
 {
     private static bool isMusicActive = true;
     public List<string> nonPlayingScenes = new List<string>();
+    private AudioSource audioSource;
 
     private void Awake()
     {
@@ -17,14 +18,25 @@ public class MenuMusic : MonoBehaviour
         else
         {
             DontDestroyOnLoad(gameObject);
+            audioSource = GetComponent<AudioSource>();
+            LoadAndApplySavedVolumeSettings();
         }
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void OnDestroy()
+    private void LoadAndApplySavedVolumeSettings()
     {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        float musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0.5f); // Default value if not set
+        AdjustVolume(musicVolume);
+    }
+
+    public void AdjustVolume(float volume)
+    {
+        if (audioSource != null)
+        {
+            audioSource.volume = volume;
+        }
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -40,16 +52,7 @@ public class MenuMusic : MonoBehaviour
             isMusicActive = true;
         }
     }
-
-    public void AdjustVolume(float volume)
-    {
-        AudioSource audioSource = GetComponent<AudioSource>();
-        if (audioSource != null)
-        {
-            audioSource.volume = volume;
-        }
-    }
-
+    
     public void ToggleActiveState()
     {
         isMusicActive = !isMusicActive;
