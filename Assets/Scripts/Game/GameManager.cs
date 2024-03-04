@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public int endingMoney = 0;
     public int endingEnergy= 0;
     public int endingReputation = 0;
+     private bool isEndingDisplayed = false;
 
     public GameObject cardGameObject;
     public CardController mainCardController;
@@ -54,6 +55,7 @@ void Start()
     cardGameObject.transform.position = defaultPositionCard;
     LoadCard(testCard);
     ResetCardToDefault();
+    endingManager = FindObjectOfType<EndingManager>();
     Debug.Log($"Start: Card X position set to {cardGameObject.transform.position.x}");
 }
 
@@ -63,7 +65,10 @@ void Start()
         HandleCardInput();
         UpdateDialogue();
 
-        endingManager.CheckForStatEndings(MoneyStatus, EnergyStatus, ReputationStatus, endingMoney, endingEnergy, endingReputation);
+       if (!isEndingDisplayed)
+        {
+            endingManager.CheckForStatEndings(MoneyStatus, EnergyStatus, ReputationStatus, endingMoney, endingEnergy, endingReputation);
+        }
     }
 
     private void UpdateDialogue()
@@ -158,10 +163,26 @@ void Start()
         actionQuote.text = "Swipe left or right";
     }
 
+     public void LoadStatEndingCard(int cardId)
+    {
+        foreach (var card in resourceManager.cards)
+        {
+            if (card.cardId == cardId)
+            {
+                LoadCard(card);
+                isEndingDisplayed = true;
+                break;
+            }
+        }
+    }
+
     private void NewCard()
     {
-        int rollDice = Random.Range(0, resourceManager.cards.Length);
-        LoadCard(resourceManager.cards[rollDice]);
+        if (!isEndingDisplayed)
+        {
+            int rollDice = Random.Range(0, resourceManager.cards.Length);
+            LoadCard(resourceManager.cards[rollDice]);
+        }
     }
 
     private void ResetCardToDefault()
@@ -169,14 +190,5 @@ void Start()
         cardGameObject.transform.position = new Vector2(0, cardGameObject.transform.position.y);
         cardGameObject.transform.rotation = Quaternion.identity;
         actionQuote.text = "Swipe left or right";
-    }
-
-    public void LoadStatEndingCard (int cardId) {
-        foreach (var card in resourceManager.cards) {
-            if (card.cardId == cardId){
-                LoadCard(card);
-                break;
-            }
-        }
     }
 }
