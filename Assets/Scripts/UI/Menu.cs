@@ -6,9 +6,7 @@ public class Menu : MonoBehaviour
 {
     [SerializeField] private Button startButton;
     [SerializeField] private Button optionsButton;
-    [SerializeField] private Button signInButton;
-    [SerializeField] private Button applyReturnButton;
-
+    [SerializeField] private Button exitButton; 
     [SerializeField] private GameObject startMenu;
     [SerializeField] private GameObject optionsMenu;
 
@@ -19,8 +17,7 @@ public class Menu : MonoBehaviour
 
         startButton.onClick.AddListener(StartGame);
         optionsButton.onClick.AddListener(ShowOptionsMenu);
-        signInButton.onClick.AddListener(OpenSignInPage);
-        applyReturnButton.onClick.AddListener(ShowStartMenu);
+        exitButton.onClick.AddListener(ExitGame);
     }
 
     private void StartGame()
@@ -34,16 +31,12 @@ public class Menu : MonoBehaviour
         optionsMenu.SetActive(true);
     }
 
-    private void OpenSignInPage()
+    private void ExitGame()
     {
-        // Placeholder for sign-in logic - will print msg to console
-        Debug.Log("Sign-in functionality goes here.");
-        // Implement the sign-in functionality here?, possibly opening a new UI panel.
-    }
-
-    private void ShowStartMenu()
-    {
-        startMenu.SetActive(true);
-        optionsMenu.SetActive(false);
+        Application.Quit();
+        // For Unity Editor (testing purposes)
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+        #endif
     }
 }
