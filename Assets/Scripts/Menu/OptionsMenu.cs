@@ -11,8 +11,9 @@ public class OptionsMenu : MonoBehaviour
     [SerializeField] private GameObject startMenu;
     [SerializeField] private GameObject optionsMenu;
     [SerializeField] private MenuMusic menuMusic;
+    [SerializeField] private CustomAudioManager customAudioManager; 
 
-    private float initialSoundEffectsVolume;
+    private float initialSoundEffectsVolume; 
     private float initialMusicVolume;
     private float initialHapticsIntensity;
 
@@ -21,6 +22,10 @@ public class OptionsMenu : MonoBehaviour
         if (menuMusic == null)
         {
             menuMusic = FindObjectOfType<MenuMusic>();
+        }
+        if (customAudioManager == null)
+        {
+            customAudioManager = FindObjectOfType<CustomAudioManager>();
         }
 
         soundEffectsVolumeSlider.onValueChanged.AddListener(HandleSoundEffectsVolumeChanged);
@@ -50,10 +55,13 @@ public class OptionsMenu : MonoBehaviour
         PlayerPrefs.SetFloat("MusicVolume", musicVolumeSlider.value);
         PlayerPrefs.SetFloat("HapticsIntensity", hapticsSlider.value);
         PlayerPrefs.Save();
+
+        HandleSoundEffectsVolumeChanged(soundEffectsVolumeSlider.value);
+        HandleMusicVolumeChanged(musicVolumeSlider.value);
+
         initialSoundEffectsVolume = soundEffectsVolumeSlider.value;
         initialMusicVolume = musicVolumeSlider.value;
         initialHapticsIntensity = hapticsSlider.value;
-        HandleMusicVolumeChanged(musicVolumeSlider.value);
     }
 
     void CancelChanges()
@@ -79,6 +87,9 @@ public class OptionsMenu : MonoBehaviour
 
     void HandleSoundEffectsVolumeChanged(float volume)
     {
-        // Sound effects volume placeholder
+        if (customAudioManager != null)
+        {
+            customAudioManager.AdjustAmbientVolume(volume); 
+        }
     }
 }
