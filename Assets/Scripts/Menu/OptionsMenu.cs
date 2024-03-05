@@ -10,8 +10,8 @@ public class OptionsMenu : MonoBehaviour
     [SerializeField] private Slider hapticsSlider;
     [SerializeField] private GameObject startMenu;
     [SerializeField] private GameObject optionsMenu;
-    [SerializeField] private MenuMusic menuMusic;
-    [SerializeField] private CustomAudioManager customAudioManager; 
+    
+    private AudioManager AudioManager; 
 
     private float initialSoundEffectsVolume; 
     private float initialMusicVolume;
@@ -19,14 +19,7 @@ public class OptionsMenu : MonoBehaviour
 
     void Start()
     {
-        if (menuMusic == null)
-        {
-            menuMusic = FindObjectOfType<MenuMusic>();
-        }
-        if (customAudioManager == null)
-        {
-            customAudioManager = FindObjectOfType<CustomAudioManager>();
-        }
+        AudioManager = FindObjectOfType<AudioManager>();
 
         soundEffectsVolumeSlider.onValueChanged.AddListener(HandleSoundEffectsVolumeChanged);
         musicVolumeSlider.onValueChanged.AddListener(HandleMusicVolumeChanged);
@@ -79,17 +72,18 @@ public class OptionsMenu : MonoBehaviour
 
     void HandleMusicVolumeChanged(float volume)
     {
-        if (menuMusic != null)
+        if (AudioManager != null)
         {
-            menuMusic.AdjustVolume(volume);
+            AudioManager.AdjustMusicVolume(volume);
         }
     }
 
-    void HandleSoundEffectsVolumeChanged(float volume)
+    void HandleSoundEffectsVolumeChanged(float sliderValue)
     {
-        if (customAudioManager != null)
+        float mappedVolume = sliderValue * 0.1f;
+        if (AudioManager != null)
         {
-            customAudioManager.AdjustAmbientVolume(volume); 
+            AudioManager.AdjustAmbientVolume(mappedVolume);
         }
     }
 }
