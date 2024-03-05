@@ -13,14 +13,14 @@ public class GameManager : MonoBehaviour
     public int endingMoney = 0;
     public int endingEnergy= 0;
     public int endingReputation = 0;
-     private bool isEndingDisplayed = false;
+    public bool isEndingDisplayed;
 
     public GameObject cardGameObject;
     public CardController mainCardController;
     public SpriteRenderer cardSpriteRenderer;
     public ResourceManager resourceManager;
     public Vector2 defaultPositionCard;
-    private EndingManager endingManager;
+    public EndingManager endingManager;
 
     public float movingSpeed;
     public float sideMargin;
@@ -49,26 +49,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
-void Start()
-{
-    defaultPositionCard = new Vector2(0, cardGameObject.transform.position.y);
-    cardGameObject.transform.position = defaultPositionCard;
-    LoadCard(testCard);
-    ResetCardToDefault();
-    endingManager = FindObjectOfType<EndingManager>();
-    Debug.Log($"Start: Card X position set to {cardGameObject.transform.position.x}");
-}
-
+    void Start()
+    {
+        defaultPositionCard = new Vector2(0, cardGameObject.transform.position.y);
+        cardGameObject.transform.position = defaultPositionCard;
+        LoadCard(testCard);
+        ResetCardToDefault();
+        endingManager = FindObjectOfType<EndingManager>();
+        Debug.Log($"Start: Card X position set to {cardGameObject.transform.position.x}");
+    }
 
     void Update()
     {
         HandleCardInput();
         UpdateDialogue();
-
-       if (!isEndingDisplayed)
-        {
-            endingManager.CheckForStatEndings(MoneyStatus, EnergyStatus, ReputationStatus, endingMoney, endingEnergy, endingReputation);
-        }
+        endingManager.CheckForStatEndings(MoneyStatus, EnergyStatus, ReputationStatus, endingMoney, endingEnergy, endingReputation);
     }
 
     private void UpdateDialogue()
@@ -151,6 +146,12 @@ void Start()
         MoneyStatus = Mathf.Clamp(MoneyStatus + moneyStat, MinValue, MaxValue);
         EnergyStatus = Mathf.Clamp(EnergyStatus + energyStat, MinValue, MaxValue);
         ReputationStatus = Mathf.Clamp(ReputationStatus + reputationStat, MinValue, MaxValue);
+
+        if (MoneyStatus <= 0 || EnergyStatus <= 0 || ReputationStatus <= 0)
+        {
+            LoadStatEndingCard();
+            return;
+        }
     }
 
     public void LoadCard(Card card)
@@ -163,16 +164,20 @@ void Start()
         actionQuote.text = "Swipe left or right";
     }
 
-     public void LoadStatEndingCard(int cardId)
+    public void LoadStatEndingCard()
     {
-        foreach (var card in resourceManager.cards)
+        Debug.Log("Load Stat Ending Card");
+        if (MoneyStatus <= 0)
         {
-            if (card.cardId == cardId)
-            {
-                LoadCard(card);
-                isEndingDisplayed = true;
-                break;
-            }
+            LoadCard(resourceManager.cards[endingMoney]);
+        }
+        else if (EnergyStatus <= 0)
+        {
+            LoadCard(resourceManager.cards[endingEnergy]);
+        }
+        else if (ReputationStatus <= 0)
+        {
+            LoadCard(resourceManager.cards[endingReputation]);
         }
     }
 
@@ -181,6 +186,7 @@ void Start()
         if (!isEndingDisplayed)
         {
             int rollDice = Random.Range(0, resourceManager.cards.Length);
+            Debug.Log("New Card");
             LoadCard(resourceManager.cards[rollDice]);
         }
     }
