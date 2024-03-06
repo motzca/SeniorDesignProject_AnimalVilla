@@ -120,14 +120,6 @@ void Start()
     {
         Direction = swipedRight ? "right" : "left";
 
-        if(swipedRight != true)
-        {
-            nextCall = flowchart.GetStringVariable("LeftChoice");
-        }
-        else
-        {
-            nextCall = flowchart.GetStringVariable("RightChoice");
-        }
         ApplyCardEffect(CurrentCard, swipedRight);
     }
 
@@ -147,6 +139,15 @@ void Start()
 
     private void ApplyCardEffect(Card card, bool swipedRight)
     {
+        if(swipedRight != true)
+        {
+            nextCall = flowchart.GetStringVariable("LeftChoice");
+        }
+        else
+        {
+            nextCall = flowchart.GetStringVariable("RightChoice");
+        }
+
         int moneyStat = swipedRight ? card.moneyStatRight : card.moneyStatLeft;
         int energyStat = swipedRight ? card.energyStatRight : card.energyStatLeft;
         int reputationStat = swipedRight ? card.reputationStatRight : card.reputationStatLeft;
@@ -163,7 +164,6 @@ void Start()
         leftQuote = flowchart.GetStringVariable("LeftActionQuote");
         rightQuote = flowchart.GetStringVariable("RightActionQuote");;
         CurrentCard = card;
-        flowchart.ExecuteBlock(nextCall);
         //characterDialogue.text = flowchart.GetStringVariable("CharacterDialogue");
         //actionQuote.text = "Swipe left or right";
         //flowchart.SetStringVariable("CharacterDialogue", card.dialogue);
