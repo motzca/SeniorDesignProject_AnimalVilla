@@ -85,19 +85,26 @@ public class CardController : MonoBehaviour
 
     private void ProcessSwipeEnd()
     {
-        Vector3 swipeDirection = lastPosition - dragStartPosition;
-        float horizontalDistance = Mathf.Abs(swipeDirection.x);
-        float verticalDistance = Mathf.Abs(swipeDirection.y);
-
-        if (horizontalDistance > verticalDistance && horizontalDistance > 1.0f) 
+        if (GameManager.Instance != null)
         {
-            bool swipedRight = swipeDirection.x > 0;
-            GameManager.Instance.ProcessSwipeResult(swipedRight, true);
+            Vector3 swipeDirection = lastPosition - dragStartPosition;
+            float horizontalDistance = Mathf.Abs(swipeDirection.x);
+            float verticalDistance = Mathf.Abs(swipeDirection.y);
+
+            if (horizontalDistance > verticalDistance && horizontalDistance > 1.0f)
+            {
+                bool swipedRight = swipeDirection.x > 0;
+                GameManager.Instance.ProcessSwipeResult(swipedRight, true);
+            }
+            else
+            {
+                Debug.Log("Swipe was unclear or not horizontal enough. No card change.");
+                GameManager.Instance.ProcessSwipeResult(false, false);
+            }
         }
         else
         {
-            Debug.Log("Swipe was unclear or not horizontal enough. No card change.");
-            GameManager.Instance.ProcessSwipeResult(false, false);
+            Debug.LogWarning("GameManager is not initialized.");
         }
     }
 

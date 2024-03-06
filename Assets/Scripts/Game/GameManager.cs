@@ -4,25 +4,23 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+    public string Direction { get; private set; }
 
     public static int MoneyStatus { get; private set; } = 50;
     public static int EnergyStatus { get; private set; } = 50;
     public static int ReputationStatus { get; private set; } = 50;
     public static readonly int MaxValue = 100;
     public static readonly int MinValue = 0;
-    public int endingMoney = 0;
-    public int endingEnergy= 0;
-    public int endingReputation = 0;
-    public bool isEndingDisplayed;
+    private int endingMoneyCardId = 0;
+    private int endingEnergyCardId = 0;
+    private int endingReputationCardId = 0;
+
 
     public GameObject cardGameObject;
-    public CardController mainCardController;
     public SpriteRenderer cardSpriteRenderer;
     public ResourceManager resourceManager;
     public Vector2 defaultPositionCard;
-    public EndingManager endingManager;
 
-    public float movingSpeed;
     public float sideMargin;
     public float sideTrigger;
     public Color textColor;
@@ -31,11 +29,15 @@ public class GameManager : MonoBehaviour
     public TMP_Text characterDialogue;
     public TMP_Text actionQuote;
 
-    public string Direction { get; private set; }
     private string leftQuote;
     private string rightQuote;
     public Card CurrentCard { get; private set; }
     public Card testCard;
+
+    public delegate void StatReachedZero(int cardId);
+    public static event StatReachedZero OnMoneyZero;
+    public static event StatReachedZero OnEnergyZero;
+    public static event StatReachedZero OnReputationZero;
 
     private void Awake()
     {
@@ -51,11 +53,11 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        // Assuming the card should start at the origin or a specific position
         defaultPositionCard = new Vector2(0, cardGameObject.transform.position.y);
         cardGameObject.transform.position = defaultPositionCard;
         LoadCard(testCard);
-        ResetCardToDefault();
-        endingManager = FindObjectOfType<EndingManager>();
+        ResetCardToDefault(); // This now also sets actionQuote correctly
         Debug.Log($"Start: Card X position set to {cardGameObject.transform.position.x}");
     }
 
@@ -63,7 +65,19 @@ public class GameManager : MonoBehaviour
     {
         HandleCardInput();
         UpdateDialogue();
-        endingManager.CheckForStatEndings(MoneyStatus, EnergyStatus, ReputationStatus, endingMoney, endingEnergy, endingReputation);
+
+        if (MoneyStatus <= 0 && OnMoneyZero != null)
+        {
+            OnMoneyZero(endingMoneyCardId);
+        }
+        else if (EnergyStatus <= 0 && OnEnergyZero != null)
+        {
+            OnEnergyZero(endingEnergyCardId);
+        }
+        else if (ReputationStatus <= 0 && OnReputationZero != null)
+        {
+            OnReputationZero(endingReputationCardId);
+        }
     }
 
     private void UpdateDialogue()
@@ -81,7 +95,7 @@ public class GameManager : MonoBehaviour
 
             if (cardGameObject.transform.position.x < 0)
             {
-                actionQuote.text = leftQuote; 
+                actionQuote.text = leftQuote;
             }
             else
             {
@@ -119,7 +133,7 @@ public class GameManager : MonoBehaviour
 
     private void ProcessCardSwipe(bool swipedRight)
     {
-        Direction = swipedRight ? "right" : "left";
+        string Direction = swipedRight ? "right" : "left";
         ApplyCardEffect(CurrentCard, swipedRight);
     }
 
@@ -127,7 +141,7 @@ public class GameManager : MonoBehaviour
     {
         if (isSwipeClear)
         {
-            ApplyCardEffect(CurrentCard, swipedRight); 
+            ApplyCardEffect(CurrentCard, swipedRight);
             NewCard();
         }
         else
@@ -146,12 +160,6 @@ public class GameManager : MonoBehaviour
         MoneyStatus = Mathf.Clamp(MoneyStatus + moneyStat, MinValue, MaxValue);
         EnergyStatus = Mathf.Clamp(EnergyStatus + energyStat, MinValue, MaxValue);
         ReputationStatus = Mathf.Clamp(ReputationStatus + reputationStat, MinValue, MaxValue);
-
-        if (MoneyStatus <= 0 || EnergyStatus <= 0 || ReputationStatus <= 0)
-        {
-            LoadStatEndingCard();
-            return;
-        }
     }
 
     public void LoadCard(Card card)
@@ -164,31 +172,10 @@ public class GameManager : MonoBehaviour
         actionQuote.text = "Swipe left or right";
     }
 
-    public void LoadStatEndingCard()
-    {
-        Debug.Log("Load Stat Ending Card");
-        if (MoneyStatus <= 0)
-        {
-            LoadCard(resourceManager.cards[endingMoney]);
-        }
-        else if (EnergyStatus <= 0)
-        {
-            LoadCard(resourceManager.cards[endingEnergy]);
-        }
-        else if (ReputationStatus <= 0)
-        {
-            LoadCard(resourceManager.cards[endingReputation]);
-        }
-    }
-
     private void NewCard()
     {
-        if (!isEndingDisplayed)
-        {
-            int rollDice = Random.Range(0, resourceManager.cards.Length);
-            Debug.Log("New Card");
-            LoadCard(resourceManager.cards[rollDice]);
-        }
+        int rollDice = Random.Range(0, resourceManager.cards.Length);
+        LoadCard(resourceManager.cards[rollDice]);
     }
 
     private void ResetCardToDefault()

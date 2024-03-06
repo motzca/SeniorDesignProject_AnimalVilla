@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e10b34aad3c3bfb48bad5c69760dd9a9, type: 3}
-  m_Name: New Card
+  m_Name: TempMoneyEndingCard
   m_EditorClassIdentifier: 
   sprite: 0
   leftQuote: 
