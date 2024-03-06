@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
     public Card testCard;
     public string nextCall;
 
+    [SerializeField] private AudioSource backgroundMusicSource; 
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -44,24 +46,37 @@ public class GameManager : MonoBehaviour
         else
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
+            LoadAndApplyUserSettings();
         }
     }
 
-void Start()
-{
-    // Assuming the card should start at the origin or a specific position
-    defaultPositionCard = new Vector2(0, cardGameObject.transform.position.y);
-    cardGameObject.transform.position = defaultPositionCard;
-    LoadCard(testCard);
-    ResetCardToDefault(); // This now also sets actionQuote correctly
-    Debug.Log($"Start: Card X position set to {cardGameObject.transform.position.x}");
-}
-
+    void Start()
+    {
+        defaultPositionCard = new Vector2(0, cardGameObject.transform.position.y);
+        cardGameObject.transform.position = defaultPositionCard;
+        LoadCard(testCard);
+        ResetCardToDefault();
+    }
 
     void Update()
     {
         HandleCardInput();
         UpdateDialogue();
+    }
+
+    private void LoadAndApplyUserSettings()
+    {
+        float savedVolume = PlayerPrefs.GetFloat("MusicVolume", 1.0f);
+        AdjustMusicVolume(savedVolume);
+    }
+
+    private void AdjustMusicVolume(float volume)
+    {
+        if (backgroundMusicSource != null)
+        {
+            backgroundMusicSource.volume = volume;
+        }
     }
 
     private void UpdateDialogue()
