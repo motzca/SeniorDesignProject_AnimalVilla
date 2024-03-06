@@ -22,7 +22,7 @@ public class Menu : MonoBehaviour
 
     private void StartGame()
     {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("Day1");
     }
 
     private void ShowOptionsMenu()
