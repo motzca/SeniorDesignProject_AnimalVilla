@@ -12,6 +12,10 @@ public class GameManager : MonoBehaviour
     public static readonly int MaxValue = 100;
     public static readonly int MinValue = 0;
 
+    private int pendingMoneyChange;
+    private int pendingEnergyChange;
+    private int pendingReputationChange;
+
     public GameObject cardGameObject;
     public CardController mainCardController;
     public SpriteRenderer cardSpriteRenderer;
@@ -142,6 +146,10 @@ public class GameManager : MonoBehaviour
     {
         if (isSwipeClear)
         {
+            UpdateMoney(pendingMoneyChange);
+            UpdateEnergy(pendingEnergyChange);
+            UpdateReputation(pendingReputationChange);
+
             ApplyCardEffect(CurrentCard, swipedRight); 
             NewCard();
         }
@@ -150,6 +158,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("Retaining current card due to unclear swipe.");
             ResetCardToDefault();
         }
+        
     }
 
     private void ApplyCardEffect(Card card, bool swipedRight)
@@ -163,13 +172,9 @@ public class GameManager : MonoBehaviour
             nextCall = flowchart.GetStringVariable("RightChoice");
         }
 
-        int moneyStat = swipedRight ? card.moneyStatRight : card.moneyStatLeft;
-        int energyStat = swipedRight ? card.energyStatRight : card.energyStatLeft;
-        int reputationStat = swipedRight ? card.reputationStatRight : card.reputationStatLeft;
-
-        MoneyStatus = Mathf.Clamp(MoneyStatus + moneyStat, MinValue, MaxValue);
-        EnergyStatus = Mathf.Clamp(EnergyStatus + energyStat, MinValue, MaxValue);
-        ReputationStatus = Mathf.Clamp(ReputationStatus + reputationStat, MinValue, MaxValue);
+        pendingMoneyChange = swipedRight ? card.moneyStatRight : card.moneyStatLeft;
+        pendingEnergyChange = swipedRight ? card.energyStatRight : card.energyStatLeft;
+        pendingReputationChange = swipedRight ? card.reputationStatRight : card.reputationStatLeft;
     }
 
     public void LoadCard(Card card)
@@ -179,11 +184,6 @@ public class GameManager : MonoBehaviour
         leftQuote = flowchart.GetStringVariable("LeftActionQuote");
         rightQuote = flowchart.GetStringVariable("RightActionQuote");;
         CurrentCard = card;
-        //characterDialogue.text = flowchart.GetStringVariable("CharacterDialogue");
-        //actionQuote.text = "Swipe left or right";
-        //flowchart.SetStringVariable("CharacterDialogue", card.dialogue);
-        //flowchart.SetStringVariable("LeftActionQuote", card.leftQuote);
-        //flowchart.SetStringVariable("RightActionQuote", card.rightQuote);
     }
 
     private void NewCard()
@@ -197,5 +197,12 @@ public class GameManager : MonoBehaviour
         cardGameObject.transform.position = new Vector2(0, cardGameObject.transform.position.y);
         cardGameObject.transform.rotation = Quaternion.identity;
         actionQuote.text = "Swipe left or right";
+    }
+
+    public void SetPendingEffects(int moneyChange, int energyChange, int reputationChange)
+    {
+        pendingMoneyChange = moneyChange;
+        pendingEnergyChange = energyChange;
+        pendingReputationChange = reputationChange;
     }
 }

@@ -7,12 +7,12 @@ public class CardEffectHandler : MonoBehaviour
     {
         if (swipedRight)
         {
-            ApplyEffects(card.moneyStatRight, card.energyStatRight, card.reputationStatRight);
+            GameManager.Instance.SetPendingEffects(card.moneyStatRight, card.energyStatRight, card.reputationStatRight);
             Debug.Log($"{card.cardName} swiped right");
         }
         else
         {
-            ApplyEffects(card.moneyStatLeft, card.energyStatLeft, card.reputationStatLeft);
+            GameManager.Instance.SetPendingEffects(card.moneyStatLeft, card.energyStatLeft, card.reputationStatLeft);
             Debug.Log($"{card.cardName} swiped left");
         }
     }
