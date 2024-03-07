@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using Fungus;
 
 public class GameManager : MonoBehaviour
 {
@@ -32,7 +33,11 @@ public class GameManager : MonoBehaviour
     private string leftQuote;
     private string rightQuote;
     public Card CurrentCard { get; private set; }
+    public Flowchart flowchart;
     public Card testCard;
+    public string nextCall;
+
+    [SerializeField] private AudioSource backgroundMusicSource; 
 
     public delegate void StatReachedZero(int cardId);
     public static event StatReachedZero OnMoneyZero;
@@ -48,17 +53,17 @@ public class GameManager : MonoBehaviour
         else
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
+            LoadAndApplyUserSettings();
         }
     }
 
     void Start()
     {
-        // Assuming the card should start at the origin or a specific position
         defaultPositionCard = new Vector2(0, cardGameObject.transform.position.y);
         cardGameObject.transform.position = defaultPositionCard;
         LoadCard(testCard);
-        ResetCardToDefault(); // This now also sets actionQuote correctly
-        Debug.Log($"Start: Card X position set to {cardGameObject.transform.position.x}");
+        ResetCardToDefault();
     }
 
     void Update()
@@ -80,26 +85,42 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void LoadAndApplyUserSettings()
+    {
+        float savedVolume = PlayerPrefs.GetFloat("MusicVolume", 1.0f);
+        AdjustMusicVolume(savedVolume);
+    }
+
+    private void AdjustMusicVolume(float volume)
+    {
+        if (backgroundMusicSource != null)
+        {
+            backgroundMusicSource.volume = volume;
+        }
+    }
+
     private void UpdateDialogue()
     {
         float positionVariance = 1.0f;
 
         if (Mathf.Abs(cardGameObject.transform.position.x - defaultPositionCard.x) <= positionVariance)
         {
-            actionQuote.text = "Swipe left or right";
+            actionQuote.text = flowchart.GetStringVariable("CharacterDialogue");
         }
         else
         {
             textColor.a = Mathf.Min((Mathf.Abs(cardGameObject.transform.position.x) - sideMargin) / divideValue, 1);
             actionQuote.color = textColor;
+            actionQuote.text = flowchart.GetStringVariable("CharacterDialogue");
 
             if (cardGameObject.transform.position.x < 0)
             {
                 actionQuote.text = leftQuote;
+                actionQuote.text = flowchart.GetStringVariable("LeftActionQuote");
             }
             else
             {
-                actionQuote.text = rightQuote;
+                actionQuote.text = flowchart.GetStringVariable("RightActionQuote");
             }
         }
     }
@@ -133,7 +154,8 @@ public class GameManager : MonoBehaviour
 
     private void ProcessCardSwipe(bool swipedRight)
     {
-        string Direction = swipedRight ? "right" : "left";
+        Direction = swipedRight ? "right" : "left";
+
         ApplyCardEffect(CurrentCard, swipedRight);
     }
 
@@ -153,6 +175,15 @@ public class GameManager : MonoBehaviour
 
     private void ApplyCardEffect(Card card, bool swipedRight)
     {
+        if(swipedRight != true)
+        {
+            nextCall = flowchart.GetStringVariable("LeftChoice");
+        }
+        else
+        {
+            nextCall = flowchart.GetStringVariable("RightChoice");
+        }
+
         int moneyStat = swipedRight ? card.moneyStatRight : card.moneyStatLeft;
         int energyStat = swipedRight ? card.energyStatRight : card.energyStatLeft;
         int reputationStat = swipedRight ? card.reputationStatRight : card.reputationStatLeft;
@@ -164,12 +195,16 @@ public class GameManager : MonoBehaviour
 
     public void LoadCard(Card card)
     {
+        flowchart.ExecuteBlock(nextCall);
         cardSpriteRenderer.sprite = resourceManager.sprites[(int)card.sprite];
-        leftQuote = card.leftQuote;
-        rightQuote = card.rightQuote;
+        leftQuote = flowchart.GetStringVariable("LeftActionQuote");
+        rightQuote = flowchart.GetStringVariable("RightActionQuote");;
         CurrentCard = card;
-        characterDialogue.text = card.dialogue;
-        actionQuote.text = "Swipe left or right";
+        //characterDialogue.text = flowchart.GetStringVariable("CharacterDialogue");
+        //actionQuote.text = "Swipe left or right";
+        //flowchart.SetStringVariable("CharacterDialogue", card.dialogue);
+        //flowchart.SetStringVariable("LeftActionQuote", card.leftQuote);
+        //flowchart.SetStringVariable("RightActionQuote", card.rightQuote);
     }
 
     private void NewCard()
