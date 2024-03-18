@@ -3,20 +3,20 @@ using UnityEngine;
 
 public class Credits : MonoBehaviour
 {
-    [SerializeField] private AudioSource creditsMusic;
     [SerializeField] private GameObject creditsMenu;
     [SerializeField] private GameObject startMenu;
-    [SerializeField] private RectTransform firstCreditsTextTransform; 
+    [SerializeField] private RectTransform firstCreditsTextTransform;
+    [SerializeField] private TypewriterEffect typewriterEffect;
     [SerializeField] private float scrollSpeed = 30f;
-    [SerializeField] private float resetPosition = 5000f;
+    [SerializeField] private float endPosition = 5000f;
     [SerializeField] private float startPosition = -1000f;
 
     void OnEnable()
     {
-        creditsMusic.time = 0;
-        creditsMusic.Play();
+        AudioManager.Instance.PauseForCredits();
         creditsMenu.SetActive(true);
         ResetCreditsPosition();
+        RestartEffects();
     }
 
     void Update()
@@ -33,9 +33,9 @@ public class Credits : MonoBehaviour
     {
         creditsTextTransform.anchoredPosition += new Vector2(0, scrollSpeed * Time.deltaTime);
 
-        if (creditsTextTransform.anchoredPosition.y >= resetPosition)
+        if (creditsTextTransform.anchoredPosition.y >= endPosition)
         {
-            creditsTextTransform.anchoredPosition = new Vector2(creditsTextTransform.anchoredPosition.x, startPosition);
+            ReturnToMenu();
         }
     }
 
@@ -44,9 +44,17 @@ public class Credits : MonoBehaviour
         firstCreditsTextTransform.anchoredPosition = new Vector2(firstCreditsTextTransform.anchoredPosition.x, startPosition);
     }
 
-    private void ReturnToMenu()
+    private void RestartEffects()
     {
-        creditsMusic.Pause();
+        if (typewriterEffect != null)
+        {
+            typewriterEffect.RestartTypingEffect();
+        }
+    }
+
+        private void ReturnToMenu()
+    {
+        AudioManager.Instance.ResumeAfterCredits();
         creditsMenu.SetActive(false);
         startMenu.SetActive(true);
     }

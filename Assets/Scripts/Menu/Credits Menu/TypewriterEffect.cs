@@ -2,34 +2,38 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class EnhancedTypewriterEffect : MonoBehaviour
+public class TypewriterEffect : MonoBehaviour
 {
     public TMP_Text textComponent;
     public float typingSpeed = 0.05f;
     private Coroutine typingCoroutine;
+    private string fullText; 
 
-    void Start()
+    void Awake()
+    {
+        fullText = textComponent.text;
+        textComponent.text = "";
+    }
+
+    void OnEnable()
     {
         StartTypingEffect();
     }
 
     public void StartTypingEffect()
     {
-        if (textComponent == null)
-        {
-            Debug.LogError("EnhancedTypewriterEffect: No TMP_Text component assigned.");
-            return;
-        }
-
-        // Stop the existing coroutine to prevent overlaps if StartTypingEffect is called again.
         if (typingCoroutine != null)
         {
             StopCoroutine(typingCoroutine);
         }
-
-        string fullText = textComponent.text;
         textComponent.text = "";
-        typingCoroutine = StartCoroutine(TypeTextWithTags(fullText));
+        typingCoroutine = StartCoroutine(DelayStart(fullText, .5f));
+    }
+
+    private IEnumerator DelayStart(string text, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        typingCoroutine = StartCoroutine(TypeTextWithTags(text));
     }
 
     private IEnumerator TypeTextWithTags(string text)
@@ -43,13 +47,11 @@ public class EnhancedTypewriterEffect : MonoBehaviour
             if (letter == '<')
             {
                 isTag = true;
-                // Check if it's a closing tag
                 isClosingTag = text.Substring(visibleText.Length).StartsWith("</");
             }
 
             visibleText += letter;
 
-            // Only update text and wait if not in a tag or at the end of a closing tag
             if (!isTag || (isTag && letter == '>' && isClosingTag))
             {
                 textComponent.text = visibleText;
@@ -64,10 +66,9 @@ public class EnhancedTypewriterEffect : MonoBehaviour
         }
     }
 
-    // Optionally add methods to restart or stop the typing effect
     public void RestartTypingEffect()
     {
-        StartTypingEffect();
+        StartTypingEffect(); 
     }
 
     public void StopTypingEffect()
@@ -77,6 +78,6 @@ public class EnhancedTypewriterEffect : MonoBehaviour
             StopCoroutine(typingCoroutine);
             typingCoroutine = null;
         }
-        textComponent.text = ""; // Or set it to the full text if preferred.
+        textComponent.text = ""; 
     }
 }

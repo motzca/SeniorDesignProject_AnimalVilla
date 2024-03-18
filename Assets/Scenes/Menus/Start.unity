@@ -185,7 +185,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 28155955}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1998024991}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PauseAmbientSounds
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 11500000, guid: 89ca3a188a223114bbbde8f21e31b14b, type: 3}
+        m_TargetAssemblyTypeName: UnityEngine.Object, UnityEngine
+        m_MethodName: set_name
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ActivateCredits
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &28155955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -752,6 +776,7 @@ GameObject:
   m_Component:
   - component: {fileID: 380878834}
   - component: {fileID: 380878833}
+  - component: {fileID: 380878835}
   m_Layer: 0
   m_Name: Credits
   m_TagString: Untagged
@@ -771,13 +796,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89ca3a188a223114bbbde8f21e31b14b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  creditsMusic: {fileID: 1998024992}
   creditsMenu: {fileID: 380878832}
   startMenu: {fileID: 529442065}
   firstCreditsTextTransform: {fileID: 1680101578}
-  scrollSpeed: 100
-  resetPosition: 4000
-  startPosition: -1250
+  typewriterEffect: {fileID: 0}
+  scrollSpeed: 90
+  endPosition: 6500
+  startPosition: -1200
 --- !u!224 &380878834
 RectTransform:
   m_ObjectHideFlags: 0
@@ -798,6 +823,102 @@ RectTransform:
   m_AnchoredPosition: {x: 561.7833, y: 3004.3232}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!82 &380878835
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 380878832}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: fffb978564423c7428aa75c34e658f87, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &529442065
 GameObject:
   m_ObjectHideFlags: 0
@@ -2918,7 +3039,6 @@ GameObject:
   - component: {fileID: 1680101580}
   - component: {fileID: 1680101579}
   - component: {fileID: 1680101584}
-  - component: {fileID: 1680101582}
   - component: {fileID: 1680101583}
   m_Layer: 5
   m_Name: Text (TMP)
@@ -2974,9 +3094,10 @@ MonoBehaviour:
     Developer:Chloe Motz</align>\r\n<align=\"right\">Fungus Developer:Keli Porter</align>\r\n\r\n<align=left><size=60><b>UI/UX</b></size></align>\r\n<align=\"right\">Menu
     Design: Ben Armour</align>\r\n<align=\"right\">Background: Dalle-3</align>\r\n<align=\"right\">Logo:
     Dalle-3</align>\r\n<align=\"right\">Button Color: LILA Design</align>\r\n<align=\"right\">Button
-    Icons: Persefida</align>\r\n\r\n<align=left><size=60><b>Audio Design</b></size></align>\r\n<align=\"right\">Music
-    Composer: Place Holder</align>\r\n<align=\"right\">Sound Effects: Place Holde</align>\r\n<align=\"right\">Audio
-    Engineering: Ben Armour</align>\r\n\r\n<align=left><size=60><b>Visual Design</b></size></align>\r\n<align=\"right\">Character
+    Icons: Sweet Land GUI</align>\r\n\r\n<align=left><size=60><b>Audio Design</b></size></align>\r\n<align=\"right\">Music
+    Composer: Kathinka</align>\n<align=\"right\">Music Composer: Raine Eera</align>\n<align=\"right\">Sound
+    Effects: InspectorJ Sound Effects</align>\r\n<align=\"right\">Audio Engineering:
+    Ben Armour</align>\r\n\r\n<align=left><size=60><b>Visual Design</b></size></align>\r\n<align=\"right\">Character
     Design: Dalle-3</align>\r\n<align=\"right\">Environment Design: Dalle-3</align>\r\n<align=\"right\">Concept
     Art: Kelli Porter</align>\r\n\n<align=left><size=60><b>Gameplay Design</b></size></align>\r\r\n<align=\"right\">Game
     Mechanics Engineer: Ben Armour</align>\r\n<align=\"right\">Story Development:
@@ -2984,7 +3105,8 @@ MonoBehaviour:
     Manager: Chloe Motz</align>\r\n<align=\"right\">Technical Director: Ben Armour</align>\r\n\r\n<align=left><size=60><b>Communications</b></size></align>\r\n<align=\"right\">Marketing
     Strategy: Hetal Modi</align>\r\n<align=\"right\">Community Manager: Hetal Modi</align>\r\n\n<align=left><size=60><b>Special
     Thanks</b></size></align>\r\n<align=\"right\">Deaf Representation: Juanita Hall\r</align>\r\n<align=\"right\">User
-    Group Testing: ITSC Student Workers</align>\r"
+    Group Testing: ITSC Student Workers</align>\r\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<align=center><size=100><b>Thanks
+    For Playing</b></size></align>\r\n<align=center><size=100><b>Animal Villa</b></size></align>\r"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3047,7 +3169,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -463.78345, y: 0, z: -356.28687, w: -2130.3242}
+  m_margin: {x: -463.78345, y: 0, z: -356.28687, w: -4837.3657}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -3061,20 +3183,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1680101577}
   m_CullTransparentMesh: 1
---- !u!114 &1680101582
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1680101577}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79e82ab6c8b3e164cb1f2448f54add6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waveSpeed: 6
-  waveHeight: 3
 --- !u!114 &1680101583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3088,7 +3196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textComponent: {fileID: 1680101579}
-  typingSpeed: 0.05
+  typingSpeed: 0.035
 --- !u!114 &1680101584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3355,11 +3463,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicSource: {fileID: 1998024992}
+  creditsMusicSource: {fileID: 380878835}
   ambientClips:
+  - {fileID: 8300000, guid: 729d7d8230fdb2147906b11827047d39, type: 3}
   - {fileID: 8300000, guid: 87588bec5f3e0db48a561df8ea3e860d, type: 3}
   playMusicOnAwake: 1
   loopMusic: 1
-  nonPlayingScenes: []
+  nonPlayingScenes:
+  - Day1
 --- !u!82 &1998024992
 AudioSource:
   m_ObjectHideFlags: 0
