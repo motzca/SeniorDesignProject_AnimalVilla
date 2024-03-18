@@ -23,20 +23,15 @@ public class AudioManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
         DontDestroyOnLoad(gameObject);
-
         LoadAndApplySavedAudioSettings();
-
         musicSource.loop = loopMusic;
         creditsMusicSource.loop = false; 
-
         if (playMusicOnAwake && musicSource.clip != null)
         {
             musicSource.Play();
         }
-
         if (ambientClips.Length > 0 && playMusicOnAwake)
         {
             foreach (var clip in ambientClips)
@@ -44,7 +39,6 @@ public class AudioManager : MonoBehaviour
                 PlayAmbientSound(clip, true);
             }
         }
-
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -94,6 +88,7 @@ public class AudioManager : MonoBehaviour
         if (nonPlayingScenes.Contains(scene.name))
         {
             musicSource.Stop();
+            StopAllAmbientSounds();
             isMusicActive = false;
         }
         else
@@ -102,6 +97,14 @@ public class AudioManager : MonoBehaviour
             {
                 musicSource.Play();
             }
+        }
+    }
+
+    private void StopAllAmbientSounds()
+    {
+        foreach (var source in ambientSources)
+        {
+            source.Stop();
         }
     }
 
