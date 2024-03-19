@@ -9,12 +9,12 @@ public class GameManager : MonoBehaviour
     public static int MoneyStatus { get; private set; } = 50;
     public static int EnergyStatus { get; private set; } = 50;
     public static int ReputationStatus { get; private set; } = 50;
-    public static readonly int MaxValue = 100;
-    public static readonly int MinValue = 0;
+    public readonly int MaxValue = 100;
+    public readonly int MinValue = 0;
 
-    private int pendingMoneyChange;
-    private int pendingEnergyChange;
-    private int pendingReputationChange;
+    public int pendingMoneyChange;
+    public int pendingEnergyChange;
+    public int pendingReputationChange;
 
     public GameObject cardGameObject;
     public CardController mainCardController;
@@ -30,6 +30,10 @@ public class GameManager : MonoBehaviour
 
     public TMP_Text characterDialogue;
     public TMP_Text actionQuote;
+    public TMP_Text MoneyNumber;
+    public TMP_Text ReputationNumber;
+    public TMP_Text EnergyNumber;
+    
 
     public string Direction { get; private set; }
     private string leftQuote;
@@ -105,23 +109,28 @@ public class GameManager : MonoBehaviour
             {
                 actionQuote.text = flowchart.GetStringVariable("RightActionQuote");
             }
+
+            //Set Status Elements
+            MoneyNumber.text = MoneyStatus.ToString();
+            ReputationNumber.text = ReputationStatus.ToString();
+            EnergyNumber.text = EnergyStatus.ToString();
         }
     }
 
-    public void UpdateMoney(int change)
-    {
-        MoneyStatus = Mathf.Clamp(MoneyStatus + change, MinValue, MaxValue);
-    }
+    //public void UpdateMoney(int change)
+    //{
+    //    MoneyStatus = Mathf.Clamp(MoneyStatus + change, MinValue, MaxValue);
+    //}
 
-    public void UpdateEnergy(int change)
-    {
-        EnergyStatus = Mathf.Clamp(EnergyStatus + change, MinValue, MaxValue);
-    }
+    //public void UpdateEnergy(int change)
+    //{
+    //    EnergyStatus = Mathf.Clamp(EnergyStatus + change, MinValue, MaxValue);
+    //}
 
-    public void UpdateReputation(int change)
-    {
-        ReputationStatus = Mathf.Clamp(ReputationStatus + change, MinValue, MaxValue);
-    }
+    //public void UpdateReputation(int change)
+    //{
+    //    ReputationStatus = Mathf.Clamp(ReputationStatus + change, MinValue, MaxValue);
+    //}
 
     private void HandleCardInput()
     {
@@ -146,11 +155,17 @@ public class GameManager : MonoBehaviour
     {
         if (isSwipeClear)
         {
-            UpdateMoney(pendingMoneyChange);
-            UpdateEnergy(pendingEnergyChange);
-            UpdateReputation(pendingReputationChange);
+            //UpdateMoney(pendingMoneyChange);
+            //UpdateEnergy(pendingEnergyChange);
+            //UpdateReputation(pendingReputationChange);
 
             ApplyCardEffect(CurrentCard, swipedRight); 
+
+            //Set Status Elements
+            MoneyNumber.text = MoneyStatus.ToString();
+            ReputationNumber.text = ReputationStatus.ToString();
+            EnergyNumber.text = EnergyStatus.ToString();
+
             NewCard();
         }
         else
@@ -172,9 +187,15 @@ public class GameManager : MonoBehaviour
             nextCall = flowchart.GetStringVariable("RightChoice");
         }
 
-        pendingMoneyChange = swipedRight ? card.moneyStatRight : card.moneyStatLeft;
-        pendingEnergyChange = swipedRight ? card.energyStatRight : card.energyStatLeft;
-        pendingReputationChange = swipedRight ? card.reputationStatRight : card.reputationStatLeft;
+        pendingMoneyChange = int.Parse(flowchart.GetStringVariable("ChangeMoney"));
+        pendingEnergyChange = int.Parse(flowchart.GetStringVariable("ChangeEnergy"));
+        pendingReputationChange = int.Parse(flowchart.GetStringVariable("ChangeStatus"));
+
+        CalculatePendingEffects(pendingMoneyChange, pendingEnergyChange, pendingReputationChange);
+
+        //pendingMoneyChange = swipedRight ? card.moneyStatRight : card.moneyStatLeft;
+        //pendingEnergyChange = swipedRight ? card.energyStatRight : card.energyStatLeft;
+        //pendingReputationChange = swipedRight ? card.reputationStatRight : card.reputationStatLeft;
     }
 
     public void LoadCard(Card card)
@@ -183,6 +204,9 @@ public class GameManager : MonoBehaviour
         cardSpriteRenderer.sprite = resourceManager.sprites[(int)card.sprite];
         leftQuote = flowchart.GetStringVariable("LeftActionQuote");
         rightQuote = flowchart.GetStringVariable("RightActionQuote");;
+        MoneyNumber.text = MoneyStatus.ToString();
+        ReputationNumber.text = ReputationStatus.ToString();
+        EnergyNumber.text = EnergyStatus.ToString();
         CurrentCard = card;
     }
 
@@ -199,10 +223,16 @@ public class GameManager : MonoBehaviour
         actionQuote.text = "Swipe left or right";
     }
 
-    public void SetPendingEffects(int moneyChange, int energyChange, int reputationChange)
+    public void CalculatePendingEffects(int pendingMoneyChange, int pendingEnergyChange, int pendingReputationChange)
     {
-        pendingMoneyChange = moneyChange;
-        pendingEnergyChange = energyChange;
-        pendingReputationChange = reputationChange;
+        //Numbers that need to be added to Status Item, will be positive in the flow chart
+        //Numbers that need to be subtracted to Status Item, will be negative in the flow chart
+        MoneyStatus = MoneyStatus + pendingMoneyChange;
+        EnergyStatus = EnergyStatus + pendingEnergyChange;
+        ReputationStatus = ReputationStatus + pendingReputationChange;
+
+        //pendingMoneyChange = moneyChange;
+        //pendingEnergyChange = energyChange;
+        //pendingReputationChange = reputationChange;
     }
 }
