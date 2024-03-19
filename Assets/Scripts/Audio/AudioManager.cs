@@ -121,8 +121,14 @@ public class AudioManager : MonoBehaviour
 
     public void PauseForCredits()
     {
-        musicSource.Pause();
-        creditsMusicSource.Play();
+        if (musicSource.gameObject.activeInHierarchy && musicSource.enabled)
+        {
+            musicSource.Pause();
+        }
+        if (creditsMusicSource.gameObject.activeInHierarchy && creditsMusicSource.enabled)
+        {
+            creditsMusicSource.Play();
+        }
         PauseAmbientSounds();
     }
 
@@ -155,10 +161,13 @@ public class AudioManager : MonoBehaviour
         isMusicActive = !isMusicActive;
         if (isMusicActive)
         {
-            musicSource.Play();
+            if (musicSource.gameObject.activeInHierarchy && musicSource.enabled)
+            {
+                musicSource.Play();
+            }
             foreach (var source in ambientSources)
             {
-                if (!source.isPlaying)
+                if (!source.isPlaying && source.gameObject.activeInHierarchy && source.enabled)
                 {
                     source.Play();
                 }
@@ -167,10 +176,7 @@ public class AudioManager : MonoBehaviour
         else
         {
             musicSource.Pause();
-            foreach (var source in ambientSources)
-            {
-                source.Pause();
-            }
+            PauseAmbientSounds();
         }
     }
 }
