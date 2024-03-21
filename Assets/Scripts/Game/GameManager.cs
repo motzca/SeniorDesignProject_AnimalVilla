@@ -71,6 +71,9 @@ public class GameManager : MonoBehaviour
     {
         HandleCardInput();
         UpdateDialogue();
+
+        //Reset Variables after each update
+        flowchart.ExecuteBlock("Reset Variables");
     }
 
     private void LoadAndApplyUserSettings()
