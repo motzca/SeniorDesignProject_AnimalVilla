@@ -9,8 +9,8 @@ public class GameManager : MonoBehaviour
     public static int MoneyStatus { get; private set; } = 50;
     public static int EnergyStatus { get; private set; } = 50;
     public static int ReputationStatus { get; private set; } = 50;
-    public readonly int MaxValue = 100;
-    public readonly int MinValue = 0;
+    public static readonly int MaxValue = 100;
+    public static readonly int MinValue = 0;
 
     public int pendingMoneyChange;
     public int pendingEnergyChange;
