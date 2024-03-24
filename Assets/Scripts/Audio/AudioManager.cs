@@ -28,6 +28,7 @@ public class AudioManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         musicSource.loop = loopMusic;
+        creditsMusicSource = gameObject.AddComponent<AudioSource>(); // Add this line
         creditsMusicSource.loop = false;
 
         LoadAndApplySavedAudioSettings();
@@ -81,8 +82,12 @@ public class AudioManager : MonoBehaviour
 
     public void AdjustMusicVolume(float volume)
     {
+        if (creditsMusicSource != null)
+        {
+            creditsMusicSource.volume = volume;
+        }
+
         musicSource.volume = volume;
-        creditsMusicSource.volume = volume;
         PlayerPrefs.SetFloat("MusicVolume", volume);
         PlayerPrefs.Save();
     }
