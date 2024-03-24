@@ -20,7 +20,6 @@ public class CardController : MonoBehaviour
     private void Update()
     {
         HandleTouchInput();
-        HandleMouseInput();
     }
 
     private void HandleTouchInput()
@@ -57,32 +56,6 @@ public class CardController : MonoBehaviour
         }
     }
 
-    private void HandleMouseInput()
-    {
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (thisCard.OverlapPoint(mousePos))
-            {
-                isDragging = true;
-                dragStartPosition = transform.position; 
-            }
-        }
-
-        if (Input.GetMouseButton(0) && isDragging)
-        {
-            transform.position = new Vector3(mousePos.x, mousePos.y, transform.position.z);
-            lastPosition = transform.position;
-        }
-
-        if (Input.GetMouseButtonUp(0) && isDragging)
-        {
-            isDragging = false;
-            ProcessSwipeEnd(); 
-        }
-    }
-
     private void ProcessSwipeEnd()
     {
         Vector3 swipeDirection = lastPosition - dragStartPosition;
@@ -112,22 +85,23 @@ public class CardController : MonoBehaviour
     private IEnumerator AnimateCardToPosition(Vector3 targetPosition)
     {
         float elapsedTime = 0;
-        float totalTime = 0.5f; 
+        float totalTime = 0.5f;
         Vector3 startPosition = transform.position;
-        cardGravity.enabled = false; 
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        float startAlpha = spriteRenderer.color.a;
 
         while (elapsedTime < totalTime)
         {
             float progress = elapsedTime / totalTime;
-            progress = Mathf.SmoothStep(0, 1, progress);
             transform.position = Vector3.Lerp(startPosition, targetPosition, progress);
+
+            float alpha = Mathf.Lerp(startAlpha, 1f, progress); 
+            spriteRenderer.color = new Color(1f, 1f, 1f, alpha);
+
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
         transform.position = targetPosition;
-        cardGravity.enabled = true; 
+        spriteRenderer.color = Color.white;
     }
-
-
 }
