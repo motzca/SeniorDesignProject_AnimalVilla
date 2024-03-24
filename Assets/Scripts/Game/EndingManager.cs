@@ -45,6 +45,7 @@ public class EndingManager : MonoBehaviour
 
     public void RestartGame()
     {
+        Debug.Log("RestartGame method called");
         isEndingHandled = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }

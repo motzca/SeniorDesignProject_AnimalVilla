@@ -140,7 +140,6 @@ public class GameManager : MonoBehaviour
     public void CheckForEndings() {
         if (MoneyStatus <= 0 && OnMoneyZero != null) {
             OnMoneyZero.Invoke();
-            Debug.Log("Check for ending (money)");
         }
         else if (EnergyStatus <= 0 && OnEnergyZero != null) {
             OnEnergyZero.Invoke();
