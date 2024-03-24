@@ -85,42 +85,49 @@ public class CardController : MonoBehaviour
 
     private void ProcessSwipeEnd()
     {
-        if (GameManager.Instance != null)
-        {
-            Vector3 swipeDirection = lastPosition - dragStartPosition;
-            float horizontalDistance = Mathf.Abs(swipeDirection.x);
-            float verticalDistance = Mathf.Abs(swipeDirection.y);
+        Vector3 swipeDirection = lastPosition - dragStartPosition;
+        float horizontalDistance = Mathf.Abs(swipeDirection.x);
+        float verticalDistance = Mathf.Abs(swipeDirection.y);
 
-            if (horizontalDistance > verticalDistance && horizontalDistance > 1.0f)
-            {
-                bool swipedRight = swipeDirection.x > 0;
-                GameManager.Instance.ProcessSwipeResult(swipedRight, true);
-            }
-            else
-            {
-                Debug.Log("Swipe was unclear or not horizontal enough. No card change.");
-                GameManager.Instance.ProcessSwipeResult(false, false);
-            }
+        float minSwipeDistance = 2.5f; 
+
+        if (horizontalDistance > verticalDistance && horizontalDistance > minSwipeDistance)
+        {
+            bool swipedRight = swipeDirection.x > 0;
+            GameManager.Instance.ProcessSwipeResult(swipedRight, true);
         }
         else
         {
-            Debug.LogWarning("GameManager is not initialized.");
+            Debug.Log("Swipe was unclear or not horizontal enough. No card change.");
+            StartCoroutine(ResetCardPosition());
         }
+    }
+
+
+    private IEnumerator ResetCardPosition()
+    {
+        yield return AnimateCardToPosition(dragStartPosition);
     }
 
     private IEnumerator AnimateCardToPosition(Vector3 targetPosition)
     {
         float elapsedTime = 0;
-        float totalTime = 0.5f;
+        float totalTime = 0.5f; 
         Vector3 startPosition = transform.position;
+        cardGravity.enabled = false; 
 
         while (elapsedTime < totalTime)
         {
-            transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / totalTime);
+            float progress = elapsedTime / totalTime;
+            progress = Mathf.SmoothStep(0, 1, progress);
+            transform.position = Vector3.Lerp(startPosition, targetPosition, progress);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
         transform.position = targetPosition;
+        cardGravity.enabled = true; 
     }
+
+
 }

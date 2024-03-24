@@ -1,46 +1,55 @@
 using UnityEngine;
+using System.Collections;
 using TMPro;
 using Fungus;
 
 public class GameManager : MonoBehaviour
 {
+    // Singleton Pattern
     public static GameManager Instance { get; private set; }
 
+    // Static Properties
     public static int MoneyStatus { get; private set; } = 50;
     public static int EnergyStatus { get; private set; } = 50;
     public static int ReputationStatus { get; private set; } = 50;
-    public readonly int MaxValue = 100;
-    public readonly int MinValue = 0;
 
-    public int pendingMoneyChange;
-    public int pendingEnergyChange;
-    public int pendingReputationChange;
-
+    // Events
     public delegate void StatReachedZero();
     public static event StatReachedZero OnMoneyZero;
     public static event StatReachedZero OnEnergyZero;
     public static event StatReachedZero OnReputationZero;
 
-    public GameObject cardGameObject;
-    public CardController mainCardController;
-    public SpriteRenderer cardSpriteRenderer;
-    public ResourceManager resourceManager;
-    public Vector2 defaultPositionCard;
-    public EndingManager endingManager;
+    // Constants
+    public readonly int MaxValue = 100;
+    public readonly int MinValue = 0;
 
-    public float movingSpeed;
-    public float sideMargin;
-    public float sideTrigger;
-    public Color textColor;
-    public float divideValue;
-
+    // UI Elements
     public TMP_Text characterDialogue;
     public TMP_Text actionQuote;
     public TMP_Text MoneyNumber;
     public TMP_Text ReputationNumber;
     public TMP_Text EnergyNumber;
-    
 
+    // Card Elements
+    public GameObject cardGameObject;
+    public CardController mainCardController;
+    public SpriteRenderer cardSpriteRenderer;
+
+    // Resource Management
+    public ResourceManager resourceManager;
+    public EndingManager endingManager;
+
+    // Card Positioning and Movement
+    public Vector2 defaultPositionCard;
+    public float movingSpeed;
+    public float sideMargin;
+    public float sideTrigger;
+
+    // Visual Properties
+    public Color textColor;
+    public float divideValue;
+
+    // Game Flow
     public string Direction { get; private set; }
     private string leftQuote;
     private string rightQuote;
@@ -49,7 +58,13 @@ public class GameManager : MonoBehaviour
     public Card testCard;
     public string nextCall;
 
-    [SerializeField] private AudioSource backgroundMusicSource; 
+    // Sound
+    [SerializeField] private AudioSource backgroundMusicSource;
+
+    // Pending Changes (Modifiers)
+    public int pendingMoneyChange;
+    public int pendingEnergyChange;
+    public int pendingReputationChange;
 
     private void Awake()
     {
@@ -68,7 +83,6 @@ public class GameManager : MonoBehaviour
 
         if (endingManager != null)
         {
-            // Activate the endingManager if it's not active
             if (!endingManager.gameObject.activeSelf)
             {
                 endingManager.gameObject.SetActive(true);
@@ -95,47 +109,37 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        HandleCardInput();
         UpdateDialogue();
         CheckForEndings();
     }
 
-    private void HandleCardInput()
-    {
-        if (cardGameObject.transform.position.x > sideTrigger && Input.GetMouseButtonUp(0))
-        {
-            ProcessCardSwipe(true);
-        }
-        else if (cardGameObject.transform.position.x < -sideMargin && Input.GetMouseButtonUp(0))
-        {
-            ProcessCardSwipe(false);
-        }
-    }
 
     private void UpdateDialogue()
     {
-        float positionVariance = 1.0f;
+        float swipeTextChangeThreshold = 2f; 
 
-        if (Mathf.Abs(cardGameObject.transform.position.x - defaultPositionCard.x) <= positionVariance)
+        float distanceFromCenter = Mathf.Abs(cardGameObject.transform.position.x - defaultPositionCard.x);
+
+        if (distanceFromCenter <= swipeTextChangeThreshold)
         {
             actionQuote.text = flowchart.GetStringVariable("CharacterDialogue");
         }
         else
         {
-            textColor.a = Mathf.Min((Mathf.Abs(cardGameObject.transform.position.x) - sideMargin) / divideValue, 1);
+            textColor.a = Mathf.Min((distanceFromCenter - sideMargin) / divideValue, 1);
             actionQuote.color = textColor;
-            actionQuote.text = flowchart.GetStringVariable("CharacterDialogue");
 
             if (cardGameObject.transform.position.x < 0)
             {
-                actionQuote.text = flowchart.GetStringVariable("LeftActionQuote");
+                actionQuote.text = "Continue";
             }
             else
             {
-                actionQuote.text = flowchart.GetStringVariable("RightActionQuote");
+                actionQuote.text = "Continue";
             }
         }
     }
+
 
     public void CheckForEndings() {
         if (MoneyStatus <= 0 && OnMoneyZero != null) {
@@ -147,13 +151,6 @@ public class GameManager : MonoBehaviour
         else if (ReputationStatus <= 0 && OnReputationZero != null) {
             OnReputationZero.Invoke();
         }
-    }
-
-    private void ProcessCardSwipe(bool swipedRight)
-    {
-        Direction = swipedRight ? "right" : "left";
-
-        ApplyCardEffect(CurrentCard, swipedRight);
     }
 
     private void ApplyCardEffect(Card card, bool swipedRight)
@@ -186,19 +183,52 @@ public class GameManager : MonoBehaviour
     {
         if (isSwipeClear)
         {
-            ApplyCardEffect(CurrentCard, swipedRight); 
-
-            NewCard();
+            StartCoroutine(AnimateCardResetAndLoadNew(swipedRight));
         }
         else
         {
             Debug.Log("Retaining current card due to unclear swipe.");
             ResetCardToDefault();
         }
+    }
+
+    private IEnumerator AnimateCardResetAndLoadNew(bool swipedRight)
+    {
+        cardSpriteRenderer.enabled = false;
+
+        yield return new WaitForSeconds(0.2f);
+
+        cardGameObject.transform.position = defaultPositionCard;
+        cardGameObject.transform.rotation = Quaternion.identity;
+
+        ApplyCardEffect(CurrentCard, swipedRight); 
+        NewCard();
         
         UpdateStatsVariables();
-        
+
+        yield return new WaitForSeconds(0.2f); 
+
+        cardSpriteRenderer.enabled = true;
     }
+
+    private IEnumerator ResetCardToDefaultAnimated()
+    {
+        Vector3 startPosition = cardGameObject.transform.position;
+        Vector3 endPosition = defaultPositionCard;
+        float duration = 0.5f; 
+        float elapsedTime = 0;
+
+        while (elapsedTime < duration)
+        {
+            cardGameObject.transform.position = Vector3.Lerp(startPosition, endPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        cardGameObject.transform.position = endPosition;
+        cardGameObject.transform.rotation = Quaternion.identity;
+    }
+
 
     public void LoadCard(Card card)
     {
@@ -240,7 +270,7 @@ public class GameManager : MonoBehaviour
         ReputationNumber.text = ReputationStatus.ToString();
         EnergyNumber.text = EnergyStatus.ToString();
     }
-   
+
     public void CalculatePendingEffects(int pendingMoneyChange, int pendingEnergyChange, int pendingReputationChange)
     {
         //Numbers that need to be added to Status Item, will be positive in the flow chart
