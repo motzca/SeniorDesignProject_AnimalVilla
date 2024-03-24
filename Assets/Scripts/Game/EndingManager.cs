@@ -20,26 +20,50 @@ public class EndingManager : MonoBehaviour
     }
 
     private void HandleMoneyZero() {
-        if (!isEndingHandled)
+         if (!isEndingHandled)
         {
-            flowchart.ExecuteBlock("Bad Ending (Money)");
-            isEndingHandled = true;
+            bool restartGame = flowchart.GetBooleanVariable("RestartGame");
+            if (restartGame)
+            {
+                RestartGame();
+            }
+            else
+            {
+                flowchart.ExecuteBlock("Bad Ending (Money)");
+                isEndingHandled = true;
+            }
         }
     }
 
     private void HandleEnergyZero() {
         if (!isEndingHandled)
         {
-            flowchart.ExecuteBlock("Bad Ending (Energy)");
-            isEndingHandled = true;
+            bool restartGame = flowchart.GetBooleanVariable("RestartGame");
+            if (restartGame)
+            {
+                RestartGame();
+            }
+            else
+            {
+                flowchart.ExecuteBlock("Bad Ending (Energy)");
+                isEndingHandled = true;
+            }
         }
     }
 
     private void HandleReputationZero() {
          if (!isEndingHandled)
         {
-            flowchart.ExecuteBlock("Bad Ending (Reputation)");
-            isEndingHandled = true;
+            bool restartGame = flowchart.GetBooleanVariable("RestartGame");
+            if (restartGame)
+            {
+                RestartGame();
+            }
+            else
+            {
+                flowchart.ExecuteBlock("Bad Ending (Reputation)");
+                isEndingHandled = true;
+            }
         }
     }
 
