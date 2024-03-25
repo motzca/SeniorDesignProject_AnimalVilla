@@ -6,6 +6,7 @@ public class EndingManager : MonoBehaviour
 {
     public Flowchart flowchart;
     private bool isEndingHandled = false;
+    [SerializeField] private string mainMenuSceneName = "Start"; 
 
     void OnEnable() {
         GameManager.OnMoneyZero += HandleMoneyZero;
@@ -77,6 +78,6 @@ public class EndingManager : MonoBehaviour
     public void ReturnToMainMenu()
     {
         isEndingHandled = false;
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene(mainMenuSceneName);
     }
 }
