@@ -80,23 +80,6 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             LoadAndApplyUserSettings();
         }
-
-        if (endingManager != null)
-        {
-            if (!endingManager.gameObject.activeSelf)
-            {
-                endingManager.gameObject.SetActive(true);
-                Debug.Log("EndingManager activated.");
-            }
-            else
-            {
-                Debug.Log("EndingManager is already active.");
-            }
-        }
-        else
-        {
-            Debug.LogError("EndingManager not found in the scene.");
-        }
     }
 
     void Start()
@@ -105,6 +88,7 @@ public class GameManager : MonoBehaviour
         cardGameObject.transform.position = defaultPositionCard;
         LoadCard(testCard);
         ResetCardToDefault();
+        ResetVariablesToDefault();
     }
 
     void Update()
@@ -283,8 +267,11 @@ public class GameManager : MonoBehaviour
     public void ResetVariablesToDefault()
 {
     MoneyStatus = 50;
+    Debug.Log(MoneyStatus);
     EnergyStatus = 50;
+    Debug.Log(EnergyStatus);
     ReputationStatus = 50;
+    Debug.Log(ReputationStatus);
 }
 
 }
