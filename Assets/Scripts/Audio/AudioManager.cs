@@ -28,7 +28,7 @@ public class AudioManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         musicSource.loop = loopMusic;
-        creditsMusicSource = gameObject.AddComponent<AudioSource>(); // Add this line
+        creditsMusicSource = gameObject.AddComponent<AudioSource>(); 
         creditsMusicSource.loop = false;
 
         LoadAndApplySavedAudioSettings();
