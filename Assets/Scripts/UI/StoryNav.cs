@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using Fungus;
 
 public class StoryNav : MonoBehaviour
@@ -10,8 +9,6 @@ public class StoryNav : MonoBehaviour
     public string prevBlock;
     public Button forwardButton;
     public Button backButton;
-
-
 
     void Awake()
     {
@@ -23,13 +20,26 @@ public class StoryNav : MonoBehaviour
     {
         nextBlock = flowchart.GetStringVariable("NextBlock");
         prevBlock = flowchart.GetStringVariable("PrevBlock");
+
+        // Check if both RightChoice and LeftChoice are not empty
+        bool hasRightChoice = !string.IsNullOrEmpty(flowchart.GetStringVariable("RightChoice"));
+        bool hasLeftChoice = !string.IsNullOrEmpty(flowchart.GetStringVariable("LeftChoice"));
+
+        // If both RightChoice and LeftChoice are present, disable the forward button
+        if (hasRightChoice && hasLeftChoice)
+        {
+            forwardButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            forwardButton.gameObject.SetActive(false);
+        }
     }
 
     public void goForward()
     {
         //if forward button is pressed, call the next block
         flowchart.ExecuteBlock(nextBlock);
-
     }
 
     public void goBack()
