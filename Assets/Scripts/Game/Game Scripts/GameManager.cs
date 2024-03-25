@@ -279,4 +279,12 @@ public class GameManager : MonoBehaviour
         EnergyStatus = EnergyStatus + pendingEnergyChange;
         ReputationStatus = ReputationStatus + pendingReputationChange;
     }
+
+    public void ResetVariablesToDefault()
+{
+    MoneyStatus = 50;
+    EnergyStatus = 50;
+    ReputationStatus = 50;
+}
+
 }

@@ -70,7 +70,7 @@ public class EndingManager : MonoBehaviour
 
     public void RestartGame()
     {
-        Debug.Log("RestartGame method called");
+        GameManager.Instance.ResetVariablesToDefault();
         isEndingHandled = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
