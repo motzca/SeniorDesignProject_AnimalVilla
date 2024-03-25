@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class AudioManager : MonoBehaviour
 {
     [SerializeField] private AudioSource musicSource;
+    [SerializeField] private AudioSource creditsMusicSource;
     [SerializeField] private AudioClip[] ambientClips;
     [SerializeField] private bool playMusicOnAwake = true;
     [SerializeField] private bool loopMusic = true;
@@ -13,35 +14,53 @@ public class AudioManager : MonoBehaviour
     private List<AudioSource> ambientSources = new List<AudioSource>();
     private static bool isMusicActive = true;
 
-    private static AudioManager instance;
+    public static AudioManager Instance { get; private set; }
 
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
 
-        instance = this;
+        Instance = this;
         DontDestroyOnLoad(gameObject);
 
         musicSource.loop = loopMusic;
-        if (playMusicOnAwake && musicSource.clip != null)
+        creditsMusicSource = gameObject.AddComponent<AudioSource>(); // Add this line
+        creditsMusicSource.loop = false;
+
+        LoadAndApplySavedAudioSettings();
+
+        if (playMusicOnAwake)
         {
             musicSource.Play();
-        }
-
-        if (ambientClips.Length > 0 && playMusicOnAwake)
-        {
-            foreach (var clip in ambientClips)
-            {
-                PlayAmbientSound(clip, true);
-            }
+            PlayAmbientSoundsIfAvailable();
         }
 
         SceneManager.sceneLoaded += OnSceneLoaded;
-        LoadAndApplySavedAudioSettings();
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (!nonPlayingScenes.Contains(scene.name))
+        {
+            if (!musicSource.isPlaying && isMusicActive)
+            {
+                PlayMusicIfAvailable();
+            }
+            PlayAllAmbientSounds();
+        }
+        else
+        {
+            StopMusicAndAmbientSounds();
+        }
+
+        if (scene.name == "Start")
+        {
+            EnsureMusicPlays();
+        }
     }
 
     public void PlayMusic(AudioClip clip, bool loop = true)
@@ -56,13 +75,18 @@ public class AudioManager : MonoBehaviour
         AudioSource ambientSource = gameObject.AddComponent<AudioSource>();
         ambientSource.clip = clip;
         ambientSource.loop = loop;
-        ambientSource.volume = Mathf.Clamp(PlayerPrefs.GetFloat("AmbientVolume", 0.1f), 0f, 0.1f);
+        ambientSource.volume = Mathf.Clamp(PlayerPrefs.GetFloat("AmbientVolume", 0.1f), 0f, 1f);
         ambientSource.Play();
         ambientSources.Add(ambientSource);
     }
 
     public void AdjustMusicVolume(float volume)
     {
+        if (creditsMusicSource != null)
+        {
+            creditsMusicSource.volume = volume;
+        }
+
         musicSource.volume = volume;
         PlayerPrefs.SetFloat("MusicVolume", volume);
         PlayerPrefs.Save();
@@ -70,44 +94,143 @@ public class AudioManager : MonoBehaviour
 
     public void AdjustAmbientVolume(float volume)
     {
-        float adjustedVolume = Mathf.Clamp(volume, 0f, 0.1f);
-        
         foreach (var source in ambientSources)
         {
-            source.volume = adjustedVolume;
+            source.volume = Mathf.Clamp(volume, 0f, 1f);
         }
-        PlayerPrefs.SetFloat("AmbientVolume", adjustedVolume);
+        PlayerPrefs.SetFloat("AmbientVolume", volume);
         PlayerPrefs.Save();
     }
 
     private void LoadAndApplySavedAudioSettings()
     {
-        float musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0.5f);
-        AdjustMusicVolume(musicVolume);
-        float ambientVolume = Mathf.Clamp(PlayerPrefs.GetFloat("AmbientVolume", 0.1f), 0f, 0.1f);
-        AdjustAmbientVolume(ambientVolume);
+        AdjustMusicVolume(PlayerPrefs.GetFloat("MusicVolume", 0.5f));
+        AdjustAmbientVolume(PlayerPrefs.GetFloat("AmbientVolume", 0.1f));
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void PlayMusicIfAvailable()
     {
-        if (nonPlayingScenes.Contains(scene.name))
+        if (musicSource.clip != null && isMusicActive)
+        {
+            musicSource.Play();
+        }
+    }
+
+    private void PlayAmbientSoundsIfAvailable()
+    {
+        foreach (var clip in ambientClips)
+        {
+            PlayAmbientSound(clip, true);
+        }
+    }
+
+    public void EnsureMusicPlays()
+    {
+        if (!musicSource.isPlaying)
+        {
+            musicSource.Play();
+        }
+    }
+
+    private void PlayAllAmbientSounds()
+    {
+        foreach (var source in ambientSources)
+        {
+            if (!source.isPlaying)
+            {
+                source.Play();
+            }
+        }
+    }
+
+    private void StopAllAmbientSounds()
+    {
+        foreach (var source in ambientSources)
+        {
+            source.Stop();
+        }
+    }
+
+    public void PauseAmbientSounds()
+    {
+        foreach (var source in ambientSources)
+        {
+            if (source.isPlaying)
+            {
+                source.Pause();
+            }
+        }
+    }
+
+    public void PauseForCredits()
+    {
+        musicSource.Pause();
+        PauseAmbientSounds();
+
+        if (creditsMusicSource != null && creditsMusicSource.gameObject.activeInHierarchy && creditsMusicSource.enabled)
+        {
+            creditsMusicSource.Play();
+        }
+    }
+
+    public void ResumeAfterCredits()
+    {
+        if (SceneManager.GetActiveScene().name == "Start")
         {
             musicSource.Stop();
-            isMusicActive = false;
+            EnsureMusicPlays();
         }
         else
         {
-            if (!musicSource.isPlaying)
+            if (!musicSource.isPlaying && isMusicActive)
             {
                 musicSource.Play();
             }
-            isMusicActive = true;
         }
+
+        if (creditsMusicSource != null && creditsMusicSource.isPlaying)
+        {
+            creditsMusicSource.Stop();
+        }
+        ResumeAmbientSounds();
+    }
+
+    private void ResumeAmbientSounds()
+    {
+        foreach (var source in ambientSources)
+        {
+            if (!source.isPlaying)
+            {
+                source.UnPause();
+            }
+        }
+    }
+
+    private void StopMusicAndAmbientSounds()
+    {
+        musicSource.Stop();
+        StopAllAmbientSounds();
+        isMusicActive = false;
     }
 
     public void ToggleActiveState()
     {
         isMusicActive = !isMusicActive;
-        musicSource.gameObject.SetActive(isMusicActive);
+        if (isMusicActive)
+        {
+            EnsureMusicPlays();
+            foreach (var source in ambientSources)
+            {
+                if (!source.isPlaying)
+                {
+                    source.Play();
+                }
+            }
+        }
+        else
+        {
+            musicSource.Pause();
+            PauseAmbientSounds();
+        }
     }
 }
