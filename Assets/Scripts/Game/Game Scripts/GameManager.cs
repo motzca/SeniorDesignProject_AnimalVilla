@@ -113,11 +113,11 @@ public class GameManager : MonoBehaviour
 
             if (cardGameObject.transform.position.x < 0)
             {
-                actionQuote.text = "Continue";
+                actionQuote.text = flowchart.GetStringVariable("LeftActionQuote");
             }
             else
             {
-                actionQuote.text = "Continue";
+                actionQuote.text = flowchart.GetStringVariable("RightActionQuote");
             }
         }
     }
