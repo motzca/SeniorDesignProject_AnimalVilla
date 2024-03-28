@@ -239,15 +239,12 @@ public class GameManager : MonoBehaviour
 
     public void UpdateStatsVariables()
     {
-        //Recieve variable numbers from Fungus Flowchart
         pendingMoneyChange = int.Parse(flowchart.GetStringVariable("ChangeMoney"));
         pendingEnergyChange = int.Parse(flowchart.GetStringVariable("ChangeEnergy"));
         pendingReputationChange = int.Parse(flowchart.GetStringVariable("ChangeStatus"));
 
-        //Calculate the effects
         CalculatePendingEffects(pendingMoneyChange, pendingEnergyChange, pendingReputationChange);
         
-        //Display new numbers for status to the player
         MoneyNumber.text = MoneyStatus.ToString();
         ReputationNumber.text = ReputationStatus.ToString();
         EnergyNumber.text = EnergyStatus.ToString();
@@ -255,8 +252,6 @@ public class GameManager : MonoBehaviour
 
     public void CalculatePendingEffects(int pendingMoneyChange, int pendingEnergyChange, int pendingReputationChange)
     {
-        //Numbers that need to be added to Status Item, will be positive in the flow chart
-        //Numbers that need to be subtracted to Status Item, will be negative in the flow chart
         MoneyStatus = MoneyStatus + pendingMoneyChange;
         EnergyStatus = EnergyStatus + pendingEnergyChange;
         ReputationStatus = ReputationStatus + pendingReputationChange;
@@ -265,11 +260,8 @@ public class GameManager : MonoBehaviour
     public void ResetVariablesToDefault()
 {
     MoneyStatus = 50;
-    Debug.Log(MoneyStatus);
     EnergyStatus = 50;
-    Debug.Log(EnergyStatus);
     ReputationStatus = 50;
-    Debug.Log(ReputationStatus);
 }
 
 }
