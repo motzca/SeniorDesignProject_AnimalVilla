@@ -27,7 +27,6 @@ public class Menu : MonoBehaviour
     private void StartGame()
     {
         SceneManager.LoadScene("Day1");
-        GameManager.Instance.ResetVariablesToDefault();
     }
 
     private void ShowOptionsMenu()
