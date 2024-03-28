@@ -12,16 +12,14 @@ public class GameManager : MonoBehaviour
     public static int MoneyStatus { get; private set; } = 50;
     public static int EnergyStatus { get; private set; } = 50;
     public static int ReputationStatus { get; private set; } = 50;
+    public static readonly int MaxValue = 100;
+    public static readonly int MinValue = 0;
 
     // Events
     public delegate void StatReachedZero();
     public static event StatReachedZero OnMoneyZero;
     public static event StatReachedZero OnEnergyZero;
     public static event StatReachedZero OnReputationZero;
-
-    // Constants
-    public readonly int MaxValue = 100;
-    public readonly int MinValue = 0;
 
     // UI Elements
     public TMP_Text characterDialogue;
