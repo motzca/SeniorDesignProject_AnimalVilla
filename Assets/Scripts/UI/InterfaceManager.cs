@@ -16,9 +16,9 @@ public class InterfaceManager : MonoBehaviour
 
     void Update()
     {
-        //moneyStatus.fillAmount = (float)GameManager.MoneyStatus / GameManager.MaxValue;
-        //energyStatus.fillAmount = (float)GameManager.EnergyStatus / GameManager.MaxValue;
-        //reputationStatus.fillAmount = (float)GameManager.ReputationStatus / GameManager.MaxValue;
+        moneyStatus.fillAmount = (float)GameManager.MoneyStatus / GameManager.MaxValue;
+        energyStatus.fillAmount = (float)GameManager.EnergyStatus / GameManager.MaxValue;
+        reputationStatus.fillAmount = (float)GameManager.ReputationStatus / GameManager.MaxValue;
 
         UpdateImpactIcons();
     }
