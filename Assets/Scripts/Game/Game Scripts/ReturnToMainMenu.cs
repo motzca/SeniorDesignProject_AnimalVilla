@@ -8,5 +8,6 @@ public class ReturnToMainMenu : MonoBehaviour
     public void ReturnToMenu()
     {
         SceneManager.LoadScene(mainMenuSceneName);
+        GameManager.Instance.ResetVariablesToDefault();
     }
 }
