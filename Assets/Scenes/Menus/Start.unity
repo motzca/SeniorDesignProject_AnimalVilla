@@ -2878,9 +2878,10 @@ MonoBehaviour:
     Icons: Sweet Land GUI</align>\r\n\r\n<align=left><size=60><b>Audio Design</b></size></align>\r\n<align=\"right\">Music
     Composer: Kathinka</align>\n<align=\"right\">Music Composer: Raine Eera</align>\n<align=\"right\">Sound
     Effects: InspectorJ Sound Effects</align>\r\n<align=\"right\">Audio Engineering:
-    Ben Armour</align>\r\n\r\n<align=left><size=60><b>Visual Design</b></size></align>\r\n<align=\"right\">Character
-    Design: Dalle-3</align>\r\n<align=\"right\">Environment Design: Dalle-3</align>\r\n<align=\"right\">Concept
-    Art: Kelli Porter</align>\r\n\n<align=left><size=60><b>Gameplay Design</b></size></align>\r\r\n<align=\"right\">Game
+    Ben Armour</align>\r\n\r\n<align=left><size=60><b>Visual Design</b></size></align>\r\n<align=\"right\">
+    Original Concept Art: Kelli Porter</align>\r\n<align=\"right\">Concept Character
+    Design: Dalle-3</align>\r\n<align=\"right\">Environment Design: Dalle-3</align>\r\n<align=\"right\">
+    Pixel Art Frames: Quipinny </align>\n\n<align=left><size=60><b>Gameplay Design</b></size></align>\r\r\n<align=\"right\">Game
     Mechanics Engineer: Ben Armour</align>\r\n<align=\"right\">Story Development:
     Chloe Motz</align>\r\n<align=\"right\">Scriptwriting: Chloe Motz</align>\r\n<align=\"right\">Project
     Manager: Chloe Motz</align>\r\n<align=\"right\">Technical Director: Ben Armour</align>\r\n\r\n<align=left><size=60><b>Communications</b></size></align>\r\n<align=\"right\">Marketing
@@ -3405,6 +3406,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1779378196}
   m_CullTransparentMesh: 1
+--- !u!1 &1857410794
+GameObject:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1857410796}
+  - component: {fileID: 1857410795}
+  m_Layer: 0
+  m_Name: _FungusState
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1857410795
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1857410794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61dddfdc5e0e44ca298d8f46f7f5a915, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectedFlowchart: {fileID: 0}
+--- !u!4 &1857410796
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1857410794}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1907401313
 GameObject:
   m_ObjectHideFlags: 0
@@ -4148,3 +4194,4 @@ SceneRoots:
   - {fileID: 1095145399}
   - {fileID: 869570154}
   - {fileID: 1998024993}
+  - {fileID: 1857410796}
