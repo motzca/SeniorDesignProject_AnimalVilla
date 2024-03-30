@@ -5,46 +5,69 @@ using Fungus;
 public class StoryNav : MonoBehaviour
 {
     public Flowchart flowchart;
-    public string nextBlock;
-    public string prevBlock;
     public Button forwardButton;
     public Button backButton;
 
+    private string nextBlock;
+    private string prevBlock;
+
     void Awake()
     {
-        forwardButton.onClick.AddListener(goForward);
-        backButton.onClick.AddListener(goBack);
+        forwardButton.onClick.AddListener(GoForward);
+        backButton.onClick.AddListener(GoBack);
     }
+
+void Start()
+{
+    ClearChoiceVariables();
+    UpdateButtonState();
+}
 
     void Update()
     {
         nextBlock = flowchart.GetStringVariable("NextBlock");
         prevBlock = flowchart.GetStringVariable("PrevBlock");
 
-        // Check if both RightChoice and LeftChoice are not empty
+        UpdateButtonState();
+    }
+
+    private void UpdateButtonState()
+    {
         bool hasRightChoice = !string.IsNullOrEmpty(flowchart.GetStringVariable("RightChoice"));
         bool hasLeftChoice = !string.IsNullOrEmpty(flowchart.GetStringVariable("LeftChoice"));
 
-        // If both RightChoice and LeftChoice are present, disable the forward button
-        if (hasRightChoice && hasLeftChoice)
+        forwardButton.interactable = !(hasRightChoice && hasLeftChoice);
+    }
+
+    public void GoForward()
+    {
+        if (!string.IsNullOrEmpty(nextBlock) && flowchart.HasBlock(nextBlock))
         {
-            forwardButton.gameObject.SetActive(true);
+            flowchart.ExecuteBlock(nextBlock);
         }
         else
         {
-            forwardButton.gameObject.SetActive(false);
+            Debug.LogWarning($"Next block '{nextBlock}' does not exist or is not set.");
         }
     }
 
-    public void goForward()
+    public void GoBack()
     {
-        //if forward button is pressed, call the next block
-        flowchart.ExecuteBlock(nextBlock);
+        if (!string.IsNullOrEmpty(prevBlock) && flowchart.HasBlock(prevBlock))
+        {
+            flowchart.ExecuteBlock(prevBlock);
+        }
+        else
+        {
+            Debug.LogWarning($"Previous block '{prevBlock}' does not exist or is not set.");
+        }
     }
 
-    public void goBack()
+    public void ClearChoiceVariables()
     {
-        //if back button is pressed, call the last block
-        flowchart.ExecuteBlock(prevBlock);
+        flowchart.SetStringVariable("LeftActionQuote", "");
+        flowchart.SetStringVariable("LeftChoice", "");
+        flowchart.SetStringVariable("RightActionQuote", "");
+        flowchart.SetStringVariable("RightChoice", "");
     }
 }

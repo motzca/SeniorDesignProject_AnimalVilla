@@ -47,12 +47,13 @@ public class GameManager : MonoBehaviour
     public Color textColor;
     public float divideValue;
 
-    // Game Flow
-    public string Direction { get; private set; }
+    // Story and Narrative Control
+    public StoryNav storyNav;
+    public Flowchart flowchart;
     private string leftQuote;
     private string rightQuote;
+    public string Direction { get; private set; }
     public Card CurrentCard { get; private set; }
-    public Flowchart flowchart;
     public Card testCard;
     public string nextCall;
 
@@ -78,6 +79,8 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             LoadAndApplyUserSettings();
         }
+
+        storyNav = FindObjectOfType<StoryNav>();
     }
 
     void Start()
@@ -183,7 +186,16 @@ public class GameManager : MonoBehaviour
         cardGameObject.transform.position = defaultPositionCard;
         cardGameObject.transform.rotation = Quaternion.identity;
 
-        ApplyCardEffect(CurrentCard, swipedRight); 
+        ApplyCardEffect(CurrentCard, swipedRight);
+        if (storyNav != null)
+        {
+            storyNav.ClearChoiceVariables();
+        }
+        else
+        {
+            Debug.LogWarning("StoryNav reference not set in GameManager.");
+        }
+
         NewCard();
         
         UpdateStatsVariables();
@@ -258,10 +270,10 @@ public class GameManager : MonoBehaviour
     }
 
     public void ResetVariablesToDefault()
-{
-    MoneyStatus = 50;
-    EnergyStatus = 50;
-    ReputationStatus = 50;
-}
+    {
+        MoneyStatus = 50;
+        EnergyStatus = 50;
+        ReputationStatus = 50;
+    }
 
 }
