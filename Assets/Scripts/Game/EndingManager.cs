@@ -40,9 +40,12 @@ public class EndingManager : MonoBehaviour
         if (!isEndingHandled)
         {
             bool restartGame = flowchart.GetBooleanVariable("RestartGame");
+             Debug.Log("RestartGame value: " + restartGame);
             if (restartGame)
             {
                 RestartGame();
+                Debug.Log("Restarting game...");
+                Debug.Log(isEndingHandled);
             }
             else
             {
@@ -59,6 +62,7 @@ public class EndingManager : MonoBehaviour
             if (restartGame)
             {
                 RestartGame();
+                
             }
             else
             {
@@ -70,6 +74,7 @@ public class EndingManager : MonoBehaviour
 
     public void RestartGame()
     {
+        Debug.Log("Restarting game...");
         GameManager.Instance.ResetVariablesToDefault();
         isEndingHandled = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
