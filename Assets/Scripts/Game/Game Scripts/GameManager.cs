@@ -227,14 +227,28 @@ public class GameManager : MonoBehaviour
     public void LoadCard(Card card)
     {
         flowchart.ExecuteBlock(nextCall);
-        cardSpriteRenderer.sprite = resourceManager.sprites[(int)card.sprite];
+        
+        string cardSpriteName = flowchart.GetStringVariable("CardSpriteName");
+        Sprite cardSprite = resourceManager.GetSpriteByName(cardSpriteName);
+
+        if (cardSprite != null)
+        {
+            cardSpriteRenderer.sprite = cardSprite;
+        }
+        else
+        {
+            Debug.LogError("Card sprite name:" + cardSpriteName);
+            Debug.LogError("Card sprite:" + cardSprite);
+        }
+        
         leftQuote = flowchart.GetStringVariable("LeftActionQuote");
-        rightQuote = flowchart.GetStringVariable("RightActionQuote");;
+        rightQuote = flowchart.GetStringVariable("RightActionQuote");
         MoneyNumber.text = MoneyStatus.ToString();
         ReputationNumber.text = ReputationStatus.ToString();
         EnergyNumber.text = EnergyStatus.ToString();
         CurrentCard = card;
     }
+
 
     private void NewCard()
     {

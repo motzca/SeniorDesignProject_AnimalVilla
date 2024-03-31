@@ -43,6 +43,7 @@ public class EndingManager : MonoBehaviour
             if (restartGame)
             {
                 RestartGame();
+                Debug.Log(isEndingHandled);
             }
             else
             {
@@ -59,6 +60,7 @@ public class EndingManager : MonoBehaviour
             if (restartGame)
             {
                 RestartGame();
+                
             }
             else
             {
