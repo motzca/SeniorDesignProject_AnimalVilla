@@ -6,15 +6,16 @@ public class StoryNav : MonoBehaviour
 {
     public Flowchart flowchart;
     public Button forwardButton;
-    public Button backButton;
+    // TO DO: Reimplement the backButton - currently causing too many issues
+    // public Button backButton;
 
     private string nextBlock;
-    private string prevBlock;
+    // private string prevBlock;
 
     void Awake()
     {
         forwardButton.onClick.AddListener(GoForward);
-        backButton.onClick.AddListener(GoBack);
+        // backButton.onClick.AddListener(GoBack);
     }
 
 void Start()
@@ -26,7 +27,7 @@ void Start()
     void Update()
     {
         nextBlock = flowchart.GetStringVariable("NextBlock");
-        prevBlock = flowchart.GetStringVariable("PrevBlock");
+        // prevBlock = flowchart.GetStringVariable("PrevBlock");
 
         UpdateButtonState();
     }
@@ -51,17 +52,17 @@ void Start()
         }
     }
 
-    public void GoBack()
-    {
-        if (!string.IsNullOrEmpty(prevBlock) && flowchart.HasBlock(prevBlock))
-        {
-            flowchart.ExecuteBlock(prevBlock);
-        }
-        else
-        {
-            Debug.LogWarning($"Previous block '{prevBlock}' does not exist or is not set.");
-        }
-    }
+    // public void GoBack()
+    // {
+    //     if (!string.IsNullOrEmpty(prevBlock) && flowchart.HasBlock(prevBlock))
+    //     {
+    //         flowchart.ExecuteBlock(prevBlock);
+    //     }
+    //     else
+    //     {
+    //         Debug.LogWarning($"Previous block '{prevBlock}' does not exist or is not set.");
+    //     }
+    // }
 
     public void ClearChoiceVariables()
     {
